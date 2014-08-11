@@ -1,0 +1,5 @@
+use spojrec;
+db.createCollection("problems");
+db.createCollection("submissionData");
+db.createCollection("users");
+db.createCollection("solvedProblems");
