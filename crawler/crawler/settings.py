@@ -24,5 +24,9 @@ DEFAULT_REQUEST_HEADERS = {
     'Accept-Language': 'pt',
 }
 
+DEPTH_PRIORITY = 1
+SCHEDULER_DISK_QUEUE = 'scrapy.squeue.PickleFifoDiskQueue'
+SCHEDULER_MEMORY_QUEUE = 'scrapy.squeue.FifoMemoryQueue'
+
 # Crawl responsibly by identifying yourself (and your website) on the user-agent
 #USER_AGENT = 'usersCrawler (+http://www.yourdomain.com)'

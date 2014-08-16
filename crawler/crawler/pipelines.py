@@ -13,6 +13,7 @@ from dataExtractor.signedlistParser import parseSignedlist
 
 import pymongo
 from pymongo import MongoClient
+#from bson import ObjectId
 
 class UserscrawlerPipeline(object):
 	def __init__(self):
@@ -25,14 +26,17 @@ class UserscrawlerPipeline(object):
 		if type(item) is UserItem:
 			self.db.users.insert(dict(item))
 		elif type(item) is SubmissionsItem:
+			#storing full history data
+			self.db.submissionData.insert(dict(item))
+			
+			#storing parsed user submission data
 			solvedProblems = []
 			
-			for problem in item['data']:
+			for problem in parseSignedlist(item['data']):
 				if problem['RESULT'] == 'AC':
 					solvedProblems.append(problem['PROBLEM'])
 			
 			self.db.solvedProblems.insert(dict({'spojId':item['spojId'], 'problemList':solvedProblems}))
-			self.db.submissionData.insert(dict(item))
 		elif type(item) is ProblemItem:
 			self.db.problems.insert(dict(item))
 		

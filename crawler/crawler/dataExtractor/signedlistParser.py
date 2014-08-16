@@ -19,7 +19,7 @@ def parseSignedlist(data):
 		elif readDummyLine:
 			readDummyLine = False
 			readData = True
-		elif readData and line[0] == '|':
+		elif readData and len(line) > 0 and line[0] == '|':
 			fields = line.split('|')
 			elem = dict()
 			for i in range(1, len(fields)):
@@ -39,3 +39,11 @@ if __name__ == "__main__":
 	assert obj[0]['PROBLEM'] == 'TELEMAR7'
 	assert obj[283]['PROBLEM'] == 'VARETAS'
 
+
+	data = str(file('testData1.txt').read())
+	obj = parseSignedlist(data)
+	
+	#The test file has 284 submissions
+	assert len(obj) == 26
+	assert obj[0]['PROBLEM'] == 'POPULAR'
+	assert obj[24]['PROBLEM'] == 'BAFO'
