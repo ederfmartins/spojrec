@@ -17,7 +17,7 @@ ITEM_PIPELINES = {
     'crawler.pipelines.UserscrawlerPipeline': 300,
 }
 
-LOG_LEVEL = 'INFO'
+#LOG_LEVEL = 'INFO'
 
 DEFAULT_REQUEST_HEADERS = {
     'Accept': 'text/html,application/xhtml+xml,application/xml;q=0.9,*/*;q=0.8',

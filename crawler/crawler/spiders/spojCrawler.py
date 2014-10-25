@@ -11,44 +11,67 @@ import re
 
 from crawler.items import *
 
+# Page relationship graph
+# <user_data_page> ---> <user_signedlist>
+#     ^      
+#     |      
+#     |      
+#     |   <problem_page> <--- <initial_links>
+#     |      ^    |        |
+#     |      |    |        |
+#     |      |    v        |
+# <ranks_problem_page> <----
+#
+
 SPOJBR_DOMAIN = ("br.spoj.com",)
 SPOJ_WORLD_DOMAIN = "www\\.spoj\\.com"
-RULE_EXPRESSION_PROBLENS = '.*/problems/[A-Z0-9]+/$'
-RULE_EXPRESSION_USERS = '.*/users/[a-z0-9_]+/'
-RULE_EXPRESSION_SUBMISSIONS = '.*/status/.+/signedlist/.*'
 
-RULE_EXPRESSION_PROBLENS_SEARCH = '.*/problems/.*'
+PROBLEM_NAME = '[A-Z0-9]+'
+USER_NAME = '[a-z0-9_]+'
 
-RULE_EXPRESSION_STATUS = '.*/status/.*'
-RULE_EXPRESSION_STATUS_USER = '.*/status/[a-z0-9_]/all/.*'
-RULE_EXPRESSION_STATUS_PROBLENS_BY_USER = '.*/status/[A-Z0-9]+,[a-z0-9_]+/'
+#pages of interest
+PROBLENS_PAGE_PATTERN = '.*/problems/' + PROBLEM_NAME + '/$'
+USERS_PAGE_PATTERN = '.*/users/' + USER_NAME + '/$'
+SUBMISSIONS_PAGE_PATTERN = '.*/status/' + USER_NAME + '/signedlist/$'
 
-RULE_EXPRESSION_RANKS = '.*/ranks/.*'
-RULE_EXPRESSION_RANKS_LANGUAGE = '.*/ranks/[A-Z0-9]+/.*lang=.*'
+#links
+PROBLEMS_LIST_PATTERN = '.*/problems/[a-z0-9_]+/$'
+PROBLEMS_LIST1_PATTERN = '.*/problems/[a-z0-9_]+/sort=0,start=\d+'
+PROBLENS_LIST2_PATTERN = '.*/problems/' + PROBLEM_NAME + '/cstart=\d+$'
+RANKS_PAGE_PATTERN = '.*/ranks/.*'
+RANKS_PAGE_PATTERN_EXCLUDE = '.*/ranks/' + PROBLEM_NAME + '/.*lang=.*'
+PROBLENS_PAGE_PATTERN_INCLUDE ='.*/problems/' + PROBLEM_NAME + '/.*cstart=.*'
+
+LINKS_ALLOWED = (PROBLENS_PAGE_PATTERN_INCLUDE, RANKS_PAGE_PATTERN, PROBLEMS_LIST_PATTERN, PROBLEMS_LIST1_PATTERN, PROBLENS_LIST2_PATTERN )
+LINKS_DENIED = (RANKS_PAGE_PATTERN_EXCLUDE,)
 
 class SpojCrawler(CrawlSpider):
 	name = "spojCrawler"
 	allowed_domains = SPOJBR_DOMAIN
-	start_urls = ["http://br.spoj.com/ranks/"]
+	start_urls = ["http://br.spoj.com/problems/seletivas", 
+	"http://br.spoj.com/problems/contest_noturno/", 
+	"http://br.spoj.com/problems/mineira/", 
+	"http://br.spoj.com/problems/obi/", 
+	"http://br.spoj.com/problems/seletiva_ioi/", 
+	"http://br.spoj.com/problems/sulamericana/"]
 	#download_delay = 2
 	
-	rules = (Rule(LinkExtractor(allow=(RULE_EXPRESSION_PROBLENS_SEARCH, ), allow_domains=SPOJBR_DOMAIN), callback='parseProblem', follow=True),
-	Rule(LinkExtractor(allow=(RULE_EXPRESSION_SUBMISSIONS, ), allow_domains=SPOJBR_DOMAIN), callback='parseSubmissions', follow=True),
-	Rule(LinkExtractor(allow=(RULE_EXPRESSION_USERS, ), allow_domains=SPOJBR_DOMAIN), callback='parseUser', follow=True),
-	
-	Rule(LinkExtractor(allow=(RULE_EXPRESSION_STATUS, RULE_EXPRESSION_RANKS ), deny=(RULE_EXPRESSION_SUBMISSIONS, RULE_EXPRESSION_STATUS_PROBLENS_BY_USER, RULE_EXPRESSION_STATUS_USER, RULE_EXPRESSION_RANKS_LANGUAGE), allow_domains=SPOJBR_DOMAIN), callback='parseStatus', follow=True))
+	rules = (Rule(LinkExtractor(allow=(PROBLENS_PAGE_PATTERN, ), allow_domains=SPOJBR_DOMAIN), callback='parseProblem', follow=True),
+	Rule(LinkExtractor(allow=(SUBMISSIONS_PAGE_PATTERN, ), allow_domains=SPOJBR_DOMAIN), callback='parseSubmissions', follow=True),
+	Rule(LinkExtractor(allow=(USERS_PAGE_PATTERN, ), allow_domains=SPOJBR_DOMAIN), callback='parseUser', follow=True),
+	Rule(LinkExtractor(allow=LINKS_ALLOWED, deny=LINKS_DENIED, allow_domains=SPOJBR_DOMAIN), follow=True, callback='parseLinks'),
+	)
 
 	def __init__(self, name=None, **kwargs):
 		ScrapyFileLogObserver(open(self.name + ".log", 'w'), level=log.INFO).start()
 		ScrapyFileLogObserver(open(self.name + "_error.log", 'w'), level=log.ERROR).start()
 		
 		super(SpojCrawler, self).__init__(name, **kwargs)
-		self.problemPattern = re.compile(RULE_EXPRESSION_PROBLENS)
 		self.spojPattern = re.compile(SPOJ_WORLD_DOMAIN)
 		
 	def parseProblem(self, response):
 		log.msg('Crawling problem url %s.' % response.url, level=log.INFO)
-		if (not self.problemPattern.search(response.url) == None) and (self.spojPattern.search(response.url) == None):
+		if self.spojPattern.search(response.url) == None:
 			item = stractProblemData(response)
 			if not (item['title'] == 'SPOJ Brasil' or item['title'] == ''):
 				return item
@@ -64,6 +87,7 @@ class SpojCrawler(CrawlSpider):
 		item = stractUserData(response)
 		return item
 		
-	def parseStatus(self, response):
-		log.msg('Crawling %s.' % response.url, level=log.INFO)
+	def parseLinks(self, response):
+		log.msg('Crawling link %s.' % response.url, level=log.INFO)
+		
 	
