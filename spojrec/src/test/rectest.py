@@ -1,5 +1,5 @@
-from rectest.eval import eval_user
-from rectest.metrics import Metrics
+from recommender.eval import eval_user
+from recommender.metrics import Metrics
 import unittest
 
 class TestEval(unittest.TestCase):

@@ -2,9 +2,9 @@ from operator import itemgetter
 from collections import defaultdict
 from math import sqrt
 
-from rectest.database import ProblemsDatabase
-from rectest.metrics import Metrics
-from eval import eval_user
+from recommender.database import ProblemsDatabase
+from recommender.metrics import Metrics
+from recommender.eval import eval_user
 
 class Recommender(object):
 

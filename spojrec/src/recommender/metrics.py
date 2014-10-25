@@ -1,8 +1,8 @@
 
 from collections import defaultdict
 
-from rectest.database import ProblemsDatabase
-from eval import eval_user
+from recommender.database import ProblemsDatabase
+from recommender.eval import eval_user
 
 class Metrics(object):
 
