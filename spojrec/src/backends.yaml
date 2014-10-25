@@ -1,0 +1,6 @@
+backends:
+- name: compMetrics
+  class: B2
+  instances: 1
+  options: failfast
+  options: dynamic

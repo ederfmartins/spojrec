@@ -1,0 +1,4 @@
+cron:
+- description: compute metrics needed by recommender.
+  url: /compmetricsstart
+  schedule: every 12 hours

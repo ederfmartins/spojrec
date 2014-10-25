@@ -1,0 +1,108 @@
+.maindiv {
+	width:100%;
+	height: 100%;
+
+	/* Firefox */
+	display:-moz-box;
+	-moz-box-pack:center;
+	-moz-box-align:center;
+	
+	/* Safari and Chrome */
+	display:-webkit-box;
+	-webkit-box-pack:center;
+	-webkit-box-align:center;
+	
+	/* W3C */
+	display:box;
+	box-pack:center;
+	box-align:center;
+}
+
+.top {
+  position: absolute;
+  width: 98%;
+  height: 30%;
+  
+  top: 0%;
+  left: 0%;
+  padding: 5px;
+}
+
+.inner {
+  position: absolute;
+  width: 98%;
+  height: 20%;
+  
+  top: 45%;
+  left: 0%;
+  box-pack:center;
+  box-align:center;
+  padding: 5px;
+  /* background-color: blue; */
+}
+
+.resultDiv {
+  position: absolute;
+  width: 100%;
+  
+  top: 60%;
+  left: 0%;
+	background-color: lime;
+}
+
+.searchInput {
+	width: 60%;
+	padding: 5px;
+	margin: 8px;
+}
+
+.searchButton {
+	-webkit-appearance: none;
+	-webkit-border-image: none;
+	-webkit-box-align: center;
+	-webkit-user-select: none;
+	-webkit-writing-mode: horizontal-tb;
+	background-color: rgb(96, 176, 68);
+	background-image: -webkit-linear-gradient(top, rgb(138, 221, 109), rgb(96, 176, 68));
+	background-repeat: repeat-x;
+	border-bottom-color: rgb(255, 255, 255);
+	border-bottom-left-radius: 5px;
+	border-bottom-right-radius: 5px;
+	border-bottom-style: none;
+	border-bottom-width: 0px;
+	border-left-color: rgb(255, 255, 255);
+	border-left-style: none;
+	border-left-width: 0px;
+	border-right-color: rgb(255, 255, 255);
+	border-right-style: none;
+	border-right-width: 0px;
+	border-top-color: rgb(255, 255, 255);
+	border-top-left-radius: 5px;
+	border-top-right-radius: 5px;
+	border-top-style: none;
+	border-top-width: 0px;
+	box-sizing: border-box;
+	color: rgb(255, 255, 255);
+	cursor: pointer;
+	font-family: Helvetica, arial, freesans, clean, sans-serif, 'Segoe UI Emoji', 'Segoe UI Symbol';
+	font-size: 12px;
+	font-style: normal;
+	font-variant: normal;
+	font-weight: bold;
+	height: 30px;
+	letter-spacing: normal;
+	line-height: 22px;
+	margin-bottom: 0px;
+	margin-left: 0px;
+	margin-right: 0px;
+	margin-top: 0px;
+	text-align: center;
+	text-indent: 0px;
+	text-shadow: rgba(0, 0, 0, 0.247059) 0px -1px 0px;
+	text-transform: none;
+	vertical-align: middle;
+	white-space: nowrap;
+	width: 60px;
+	word-spacing: 0px;
+	writing-mode: lr-tb;
+}
