@@ -1,45 +1,16 @@
 from google.appengine.ext import webapp
 from google.appengine.ext.webapp.util import run_wsgi_app
 
-class Attr:
-    def __init__(self, attr, value):
-        self.attr = attr
-        self.value = value
-    
-    def __repr__(self):
-        return self.attr + '="' + self.value + '"'
-
-class HtmlElement:
-    def __init__(self, tagName):
-        self.tagName = tagName
-        self.attrs = []
-        self.childrem = []
-    
-    def addAttr(self, attr):
-        self.attrs.append(attr)
-        return self
-    
-    def addNode(self, node):
-        self.childrem.append(node)
-        return node
-        
-    def __repr__(self):
-        start = '<' + self.tagName
-        
-        for attr in self.attrs:
-            start += ' ' + str(attr) 
-        
-        start += '>'
-        end = '</' + self.tagName + '>'
-        body = ''.join(str(x) for x in self.childrem)
-        return start + body + end
+from webpages.html import Attr, HtmlElement
+from recommender.engine import rec
 
 class RecPage(webapp.RequestHandler):
     
     def __init__(self, request, response):
         super(webapp.RequestHandler, self).__init__()
         self.initialize(request, response)
-        self.resultTable = []
+        self.recommendedProblems = []
+        self.spojId = ''
         
     def get_head(self):
         head = HtmlElement('head')
@@ -84,21 +55,38 @@ class RecPage(webapp.RequestHandler):
         query = HtmlElement('input')
         query.addAttr(Attr('id', 'userId'))
         query.addAttr(Attr('name', 'userId'))
-        query.addAttr(Attr('placeholder', "Your spoj's user name"))
+        query.addAttr(Attr('placeholder', "id de um usuário ou problema do spoj"))
         query.addAttr(Attr('class', "searchInput"))
         searchDiv.addNode(query)
         
         search = HtmlElement('input')
         search.addAttr(Attr('type', "submit"))
-        search.addAttr(Attr('value', "Search"))
+        search.addAttr(Attr('value', "Buscar"))
         search.addAttr(Attr('class', "searchButton"))
         searchDiv.addNode(search)
         
-        if len(self.resultTable) > 0:
+        if len(self.recommendedProblems) > 0:
             resultDiv = HtmlElement('div')
             resultDiv.addAttr(Attr('class', 'resultDiv'))
-            for result in self.resultTable:
-                resultDiv.addNode(result)
+            
+            cnt = 1
+            resultTable = HtmlElement('table').addAttr(Attr('class', 'recProbTable'))
+            
+            th = HtmlElement('tr')
+            th.addNode(HtmlElement('th').addNode('#'))
+            th.addNode(HtmlElement('th').addNode('Problemas recomendados para ' + self.spojId))
+            th.addNode(HtmlElement('th').addNode('Id do Problema'))
+            resultTable.addNode(th)
+            
+            for problem in self.recommendedProblems:
+                tr = HtmlElement('tr')
+                tr.addNode(HtmlElement('td').addNode(str(cnt)))
+                tr.addNode(HtmlElement('td').addNode(HtmlElement('a').addAttr(Attr('href', problem['url'])).addNode(problem['title'])))
+                tr.addNode(HtmlElement('td').addNode(HtmlElement('a').addAttr(Attr('href', problem['url'])).addNode(problem['spojId'])))
+                resultTable.addNode(tr)
+                cnt += 1
+            
+            resultDiv.addNode(resultTable)
             div.addNode(resultDiv)
         
         body = HtmlElement('body')
@@ -111,8 +99,8 @@ class RecPage(webapp.RequestHandler):
         
     
     def post(self):
-        spojId = self.request.get("userId")
-        self.resultTable.append(spojId)
+        self.spojId = self.request.get("userId")
+        self.recommendedProblems = rec(self.spojId)
         self.get()
         
     

@@ -12,7 +12,7 @@ from downloadQueue import DonloadQueue
 from basicdefs import PROBLEM_NAME
 from basicdefs import PROBLENS_PAGE_PATTERN, USERS_PAGE_PATTERN, SUBMISSIONS_PAGE_PATTERN
 from basicdefs import WORKER_QUEUE_URL
-from spojdata import ProblemItem, SubmissionsItem, UserItem
+from model.spojdata import update_problem, update_user, update_user_submissions
 
 START_SEED = 'http://br.spoj.com'
 
@@ -42,41 +42,31 @@ def extract_unique_element(xpath):
     else:
         return ''
 
-def extract_problem_data(doc, url):
+
+def parse_problem(doc, url):
     spojId = url.split('/problems/')[1].split('/.+')[0].replace('/', '')
     title = extract_unique_element(doc.xpath('//div[@class="prob"]/table/tr/td/h1/text()'))
     snippet = extract_unique_element(doc.xpath('//h3[text()="Tarefa"]/preceding-sibling::p[1]'))
-    return ProblemItem(spojId=spojId, title=title, url=url, snippet=snippet)
-
-def extract_submissions_data(doc, url):
+    update_problem(identifier=spojId, title=title, url=url, snippet=snippet)
+    
+def parse_submissions(doc, url):
     spojId = url.split('/status/')[1].split('/signedlist/')[0]
     data = tostring(doc)
-    return SubmissionsItem(spojId=spojId, data=data, url=url)
+    update_user_submissions(identifier=spojId, data=data, url=url)
 
-def extract_user_data(doc, url):
+def parse_user(doc, url):
     spojId = extract_unique_element(doc.xpath('//td/i/font/text()'))
     name = extract_unique_element(doc.xpath("//h3/text()")).replace(u'Informa\xe7\u0151es do ', '').strip()
     country = extract_unique_element(doc.xpath(u"//td[text()='País:']/following-sibling::td[1]/text()"))
     school = extract_unique_element(doc.xpath(u"//td[text()='Instituiçăo:']/following-sibling::td[1]/text()"))
-    return UserItem(spojId=spojId, name=name, country=country, school=school, url=url)
-
-def parse_problem(doc, url):
-    problemItem = extract_problem_data(doc, url)
-    problemItem.put()
-    
-def parse_submissions(doc, url):
-    submissionsItem = extract_submissions_data(doc, url)
-    submissionsItem.put()
-
-def parse_user(doc, url):
-    userItem = extract_user_data(doc, url)
-    userItem.put()
+    update_user(identifier=spojId, name=name, country=country, school=school, url=url)
 
 def follow(url):
     logging.debug('follow(' + url + ')')
     for pattern in LINKS_ALLOWED:
         if pattern.search(url):
-            return not LINKS_DENIED.search(url)
+            if not LINKS_DENIED.search(url):
+                return True
         
     return False
 

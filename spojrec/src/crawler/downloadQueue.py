@@ -3,7 +3,6 @@ import logging
 from operator import isCallable
 
 from google.appengine.api import taskqueue
-from google.appengine.ext import ndb
 from google.appengine.api import memcache
 
 from basicdefs import WORKER_QUEUE_URL
@@ -35,13 +34,10 @@ class DonloadQueue:
 
     def need_download(self, url):
         """Verify if a url need to be downloaded."""
-        #result = DonloadQueueRecord.query(DonloadQueueRecord.url == url).fetch()
-        #logging.debug('need_download(' + url + ') len =' + str(len(result)))
-        #return len(result) == 0
         needDownload = True
         storedUrl = self.memcacheClient.gets(url)
         
-        if not storedUrl is None:
+        if storedUrl is not None:
             if storedUrl == _DOWNLOADED:
                 needDownload = False
         
@@ -52,7 +48,7 @@ class DonloadQueue:
         wait = False
         storedUrl = self.memcacheClient.gets(url)
         
-        if not storedUrl is None:
+        if storedUrl is not None:
             wait = True
         
         logging.debug('need_download(' + url + ') =' + str(wait))
@@ -65,12 +61,10 @@ class DonloadQueue:
             
     
     def mark_as_downloaded(self, theUrl):
-        #DonloadQueueRecord(url=theUrl).put()
         self.memcacheClient.add(key=theUrl, value=_DOWNLOADED, time=5*3600)
     
     def clean_url_list(self):
         """limpar a entidade que armazena as urls."""
-        #ndb.delete_multi(DonloadQueueRecord.query().fetch(keys_only=True))
         pass
     
     def add(self, url):
@@ -122,9 +116,4 @@ class DonloadQueue:
         self.clean_url_list()
         for url in seeds:
             self.add(url)
-            
-class DonloadQueueRecord(ndb.Model):
-    """To check if a url is already downloaded"""
-    url = ndb.StringProperty()
-    date = ndb.DateTimeProperty(auto_now_add=True)
     

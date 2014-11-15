@@ -1,6 +1,7 @@
 from operator import itemgetter
-from collections import defaultdict
 from math import sqrt
+
+import logging
 
 from recommender.database import ProblemsDatabase
 from recommender.metrics import Metrics
@@ -15,7 +16,7 @@ class Recommender(object):
 	def get_solved_problems_by_user(self, user):
 		return self.solvedProblemsByUser[user]
 
-	def rec(user, topk=5):
+	def rec(self, user, topk=5):
 		raise NotImplementedError
 
 
@@ -74,6 +75,7 @@ class Dacu(Recommender):
 
 	
 	def compute_user_dacu(self, user, topk=None):
+		logging.info('Recommending problems for' + user)
 		user_dacu = 0.0
 		problems = self.get_solved_problems_by_user(user)
 		nump = len(problems)

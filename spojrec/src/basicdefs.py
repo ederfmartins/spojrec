@@ -10,3 +10,6 @@ USER_NAME = '[a-z0-9_]+'
 PROBLENS_PAGE_PATTERN = '.*/problems/' + PROBLEM_NAME + '/$'
 USERS_PAGE_PATTERN = '.*/users/' + USER_NAME + '/$'
 SUBMISSIONS_PAGE_PATTERN = '.*/status/' + USER_NAME + '/signedlist/$'
+
+#default recommender in mencache
+DEFAULT_RECOMMENDER = 'defaultRecommender'

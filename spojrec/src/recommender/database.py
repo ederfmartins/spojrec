@@ -1,12 +1,11 @@
 
 from crawler.crawler.dataExtractor.signedlistParser import parseSignedlist
 
-import pymongo
-from pymongo import MongoClient
+#from pymongo import MongoClient
 
 class ProblemsDatabase(object):
 	def __init__(self):
-		self.client = MongoClient()
+		#self.client = MongoClient()
 		self.db = self.client.spojrec
 		
 		self.parsedProblemsByUser = self.load_problems()

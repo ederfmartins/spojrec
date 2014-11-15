@@ -1,5 +1,8 @@
+import datetime
 from google.appengine.ext import webapp
 from google.appengine.ext.webapp.util import run_wsgi_app
+
+from google.appengine.ext import ndb
 
 #from lxml.html import parse
 #from urllib2 import urlopen
@@ -24,19 +27,17 @@ class MainPage(webapp.RequestHandler):
             
         self.response.write('<pre>testeeeee!!!!</pre>')
         
-        #result = DonloadQueueRecord.query().fetch(5000)
-        #self.response.write('<pre>len(DonloadQueueRecord)='+ str(len(result)) +'</pre>')
-        #for data in result:
-        #    data.key.delete()
+        #teste = TestKind(key_name='um teste', spojId='teste', title='sera que isso vai funcionar?')
+        #teste.put()
         
-        result = ProblemItem.query().fetch(1000)
-        self.response.write('<pre>len(ProblemItem)='+ str(len(result)) +'</pre>')
+        #TestKind1(key=ndb.Key(TestKind1, 'eder'), spojId='teste', title='sera que isso vai funcionar?').put()
         
-        result = UserItem.query().fetch(20000)
-        self.response.write('<pre>len(UserItem)='+ str(len(result)) +'</pre>')
-        
-        result = SubmissionsItem.query().fetch(20000)
-        self.response.write('<pre>len(SubmissionsItem)='+ str(len(result)) +'</pre>')
+        #key = ndb.Key(TestKind1, 'Sandy')
+        #entidade = key.get()
+        #entidade.spojId ='teste'
+        #entidade.title ='sera que isso vai funcionar?'
+        #entidade.timestamp = datetime.datetime.now()
+        #entidade.put()
         
             
 

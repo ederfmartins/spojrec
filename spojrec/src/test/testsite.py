@@ -1,7 +1,7 @@
 # -*- coding: utf-8 -*-
 import unittest
 
-from site.rec import Attr, HtmlElement
+from webpages.html import Attr, HtmlElement
 
 class TestHtml(unittest.TestCase):
     

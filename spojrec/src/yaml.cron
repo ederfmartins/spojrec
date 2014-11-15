@@ -1,4 +1,4 @@
 cron:
 - description: compute metrics needed by recommender.
-  url: /compmetricsstart
+  url: /_ah/start
   schedule: every 12 hours

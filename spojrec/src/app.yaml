@@ -6,12 +6,12 @@ threadsafe: no
 
 handlers:
 - url: /
-  script: site/rec.py
+  script: webpages/rec.py
   
 - url: /helloworld
   script: helloworld.py
-  
-- url: /compmetricsstart
+
+- url: /compmetrics
   script: recommender/compmetricsJob.py
 
 - url: /testrec

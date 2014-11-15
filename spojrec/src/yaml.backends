@@ -1,0 +1,6 @@
+backends:
+- name: compmetrics
+  class: B2
+  instances: 1
+  options: dynamic, failfast
+  start: recommender/compmetricsJob.app
