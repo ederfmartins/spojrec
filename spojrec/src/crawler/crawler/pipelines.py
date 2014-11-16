@@ -4,7 +4,7 @@
 #
 # Don't forget to add your pipeline to the ITEM_PIPELINES setting
 # See: http://doc.scrapy.org/en/latest/topics/item-pipeline.html
-
+import os
 import scrapy
 from scrapy import log
 
@@ -17,8 +17,11 @@ from pymongo import MongoClient
 
 class UserscrawlerPipeline(object):
 	def __init__(self):
-		self.client = MongoClient()
-		self.db = self.client.spojrec
+		host = os.environ['OPENSHIFT_MONGODB_DB_HOST']
+        port = os.environ['OPENSHIFT_MONGODB_DB_PORT']
+        self.client = MongoClient('mongodb://' + host + ':' + port + '/')
+        self.client.index.authenticate('admin', 'vhZcQNxhPHwe', mechanism='MONGODB-CR')
+        self.db = self.client.index
 
 	def process_item(self, item, spider):
 		log.msg('Adding %s to mongodb.' % item['spojId'], level=log.INFO)
