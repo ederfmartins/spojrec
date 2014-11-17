@@ -5,13 +5,13 @@ from spojrec.src.crawler.crawler.dataExtractor.signedlistParser import parseSign
 
 class ProblemsDatabase(object):
 	def __init__(self, loadMetricsOnly=False):
-		#host = os.environ['OPENSHIFT_MONGODB_DB_HOST']
-		#port = os.environ['OPENSHIFT_MONGODB_DB_PORT']
-		#self.client = MongoClient('mongodb://' + host + ':' + port + '/')
-		#self.client.index.authenticate('admin', 'vhZcQNxhPHwe', mechanism='MONGODB-CR')
-		#self.db = self.client.index
-		self.client = MongoClient()
-		self.db = self.client.spojrec
+		host = os.environ['OPENSHIFT_MONGODB_DB_HOST']
+		port = os.environ['OPENSHIFT_MONGODB_DB_PORT']
+		self.client = MongoClient('mongodb://' + host + ':' + port + '/')
+		self.client.index.authenticate('admin', 'vhZcQNxhPHwe', mechanism='MONGODB-CR')
+		self.db = self.client.index
+		#self.client = MongoClient()
+		#self.db = self.client.spojrec
 		
 		if loadMetricsOnly:
 			self._metrics = self._load_metrics()
