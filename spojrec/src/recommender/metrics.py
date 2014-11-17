@@ -1,14 +1,17 @@
 
 from collections import defaultdict
 
-from recommender.database import ProblemsDatabase
-from recommender.eval import eval_user
+from spojrec.src.recommender.database import ProblemsDatabase
+from spojrec.src.recommender.eval import eval_user
 
 class Metrics(object):
 
-	def __init__(self, problems):
-		self.parsedProblemsByUser = problems
-		self._compute_metrics()
+	def __init__(self, problems=None):
+		if problems is not None:
+			self.parsedProblemsByUser = problems
+			self._compute_metrics()
+			self._num_users = len(self.parsedProblemsByUser)
+			self.parsedProblemsByUser = None
 	
 	def _compute_metrics(self):
 		self._compute_num_submissions()
@@ -63,7 +66,7 @@ class Metrics(object):
 		return len(self.problemsSub)
 	
 	def get_num_users(self):
-		return len(self.parsedProblemsByUser)
+		return self._num_users
 	
 	def get_num_submitions(self, problem):
 		return self.problemsSub[problem]

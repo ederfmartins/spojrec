@@ -1,19 +1,32 @@
-from google.appengine.api import memcache
-from basicdefs import DEFAULT_RECOMMENDER
+try:
+    from google.appengine.api import memcache
+    from basicdefs import DEFAULT_RECOMMENDER
+except:
+    from spojrec.src.basicdefs import DEFAULT_RECOMMENDER
 
-def _is_valid_problem(spojId):
-    return True
+    from spojrec.src.recommender.rec import Dacu, get_acepted_problems
+    from spojrec.src.recommender.database import ProblemsDatabase
+    from spojrec.src.recommender.metrics import Metrics
 
-def _is_valid_user(spojId):
-    return False
+def create_default_recommender():
+    database = ProblemsDatabase()
+    metrics = Metrics(database.get_test())
+    database.save_metrics(metrics)
+
 
 def rec(spojId, topk=5):
-    if _is_valid_problem(spojId):
+    database = ProblemsDatabase(True)
+    metricsDict = database.get_metrics()
+    user = database.find_user(spojId)
+
+    if spojId in metricsDict["problems"]:
+        pass
+    elif user is not None:
+        metrics = Metrics()
+        metrics.__dict__.update(metricsDict)
         recommendedProblems = []
-        #recommendedProblems.append({'spojId':'teste1', 'url':'www.xxxxx', 'title':'bal ldj a aaa'})
-        #recommendedProblems.append({'spojId':'teste2', 'url':'br.spoj.xx', 'title':'Mais um teste'})
-        memcacheClient = memcache.Client()
-        rec = memcacheClient.gets(DEFAULT_RECOMMENDER)
+        userProblems = database.get_problems_of_user_from_db(spojId)
+        rec = Dacu(metrics, get_acepted_problems(userProblems))
         
         recProblems = rec.rec(spojId, topk)
         cnt = 0
@@ -21,10 +34,16 @@ def rec(spojId, topk=5):
             if cnt >= topk:
                 break
             
-            recommendedProblems.append({'spojId':problem, 'url':'http://br.spoj.com/' + problem, 'title':'bal ldj a aaa'})
+            theProblem = database.find_problem(problem)
+            title = problem
+            if theProblem is not None:
+            	title = theProblem['title']
+            recommendedProblems.append({'spojId':problem, 'url':'http://br.spoj.com/' + problem, 'title':title})
     
             cnt += 1
         
         return recommendedProblems
-    elif _is_valid_user(spojId):
-        pass
+
+if __name__ == "__main__":
+    create_default_recommender()
+    #print rec("ederfmartins", 10)

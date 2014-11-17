@@ -3,9 +3,9 @@ from math import sqrt
 
 import logging
 
-from recommender.database import ProblemsDatabase
-from recommender.metrics import Metrics
-from recommender.eval import eval_user
+from spojrec.src.recommender.database import ProblemsDatabase
+from spojrec.src.recommender.metrics import Metrics
+from spojrec.src.recommender.eval import eval_user
 
 class Recommender(object):
 

@@ -18,10 +18,10 @@ from pymongo import MongoClient
 class UserscrawlerPipeline(object):
 	def __init__(self):
 		host = os.environ['OPENSHIFT_MONGODB_DB_HOST']
-        port = os.environ['OPENSHIFT_MONGODB_DB_PORT']
-        self.client = MongoClient('mongodb://' + host + ':' + port + '/')
-        self.client.index.authenticate('admin', 'vhZcQNxhPHwe', mechanism='MONGODB-CR')
-        self.db = self.client.index
+		port = os.environ['OPENSHIFT_MONGODB_DB_PORT']
+		self.client = MongoClient('mongodb://' + host + ':' + port + '/')
+		self.client.index.authenticate('admin', 'vhZcQNxhPHwe', mechanism='MONGODB-CR')
+		self.db = self.client.index
 
 	def process_item(self, item, spider):
 		log.msg('Adding %s to mongodb.' % item['spojId'], level=log.INFO)

@@ -1,8 +1,17 @@
-from google.appengine.ext import webapp
-from google.appengine.ext.webapp.util import run_wsgi_app
+# -*- coding: utf-8 -*-
 
-from webpages.html import Attr, HtmlElement
-from recommender.engine import rec
+try:
+    import webapp2 as webapp
+except IOError:
+	from google.appengine.ext import webapp
+	from google.appengine.ext.webapp.util import run_wsgi_app
+
+try:
+    from webpages.html import Attr, HtmlElement
+    from recommender.engine import rec
+except IOError:
+    from spojrec.src.webpages.html import Attr, HtmlElement
+    from spojrec.src.recommender.engine import rec
 
 class RecPage(webapp.RequestHandler):
     
@@ -23,7 +32,7 @@ class RecPage(webapp.RequestHandler):
         css = HtmlElement('link')
         css.addAttr(Attr('rel', 'stylesheet'))
         css.addAttr(Attr('type', 'text/css'))
-        css.addAttr(Attr('href', 'style.css'))
+        css.addAttr(Attr('href', 'static/style.css'))
         head.addNode(css)
         
         title = HtmlElement('title')
@@ -44,7 +53,7 @@ class RecPage(webapp.RequestHandler):
         form.addNode(div)
         
         logoDiv = HtmlElement('div')
-        logoDiv.addNode(HtmlElement('img').addAttr(Attr('src', 'logo.png')))
+        logoDiv.addNode(HtmlElement('img').addAttr(Attr('src', 'static/logo.png')))
         logoDiv.addAttr(Attr('class', "top"))
         div.addNode(logoDiv)
         
@@ -90,7 +99,7 @@ class RecPage(webapp.RequestHandler):
             div.addNode(resultDiv)
         
         body = HtmlElement('body')
-        body.addAttr(Attr('style', 'background-image:url(balloon-release.jpg);background-size: cover;'))
+        body.addAttr(Attr('style', 'background-image:url(static/balloon-release.jpg);background-size: cover;'))
         body.addNode(form)
         return body
     
@@ -110,8 +119,9 @@ class RecPage(webapp.RequestHandler):
 application = webapp.WSGIApplication([('/', RecPage)], debug=True)
 
 
-def main():
-    run_wsgi_app(application)
+#def main():
+#    run_wsgi_app(application)
 
-if __name__ == "__main__":
-    main()
+#if __name__ == "__main__":
+#    main()
+
