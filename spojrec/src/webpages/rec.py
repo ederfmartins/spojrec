@@ -2,16 +2,16 @@
 
 try:
     import webapp2 as webapp
-except IOError:
+except ImportError:
 	from google.appengine.ext import webapp
 	from google.appengine.ext.webapp.util import run_wsgi_app
 
 try:
-    from webpages.html import Attr, HtmlElement
-    from recommender.engine import rec
-except IOError:
     from spojrec.src.webpages.html import Attr, HtmlElement
     from spojrec.src.recommender.engine import rec
+except ImportError:
+    from webpages.html import Attr, HtmlElement
+    from recommender.engine import rec
 
 class RecPage(webapp.RequestHandler):
     
