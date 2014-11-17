@@ -8,10 +8,10 @@ except ImportError:
 
 try:
     from spojrec.src.webpages.html import Attr, HtmlElement
-    from spojrec.src.recommender.engine import rec
+    from spojrec.src.recommender.engine import rec, create_default_recommender
 except ImportError:
     from webpages.html import Attr, HtmlElement
-    from recommender.engine import rec
+    from recommender.engine import rec, create_default_recommender
 
 class RecPage(webapp.RequestHandler):
     
@@ -109,6 +109,7 @@ class RecPage(webapp.RequestHandler):
     
     def post(self):
         self.spojId = self.request.get("userId")
+        create_default_recommender()
         self.recommendedProblems = rec(self.spojId)
         self.get()
         
