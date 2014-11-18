@@ -33,7 +33,7 @@ def rec(spojId, recName='DACU',topk=5):
         if recName == 'DACU':
             rec = Dacu(metrics, get_acepted_problems(userProblems))
             recProblems = rec.rec(spojId, topk)
-        elif:
+        elif recName == 'HITS':
             rec = HitsRec(metrics, get_acepted_problems(userProblems))
             recProblems = rec.rec(spojId, topk)
             
