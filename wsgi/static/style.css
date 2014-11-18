@@ -56,15 +56,6 @@
 	margin: 8px;
 }
 
-.recProbTable {
-	font-size: x-large;
-	/*color: black;*/
-	color: #f89406;
-	font-family: 'Helvetica Neue', Helvetica, Arial, sans-serif;
-	font-size: 24px;
-	font-weight: 500;
-}
-
 .recProbTable tbody tr td, tbody tr th a {
 	padding: 0px 15px 0px 15px;
 	/*background-color: rgb(53, 58, 65);*/
