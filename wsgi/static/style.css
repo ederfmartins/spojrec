@@ -80,10 +80,15 @@
 	width: 222px;
 }
 
-/*.recProbTable tbody tr td a {
-	font-size: x-large;
-	color: black;
-}*/
+.recProbTable tbody tr td a {
+	/*font-size: x-large;
+	color: black;*/
+	color: rgb(238, 95, 91);
+	font-family: 'Helvetica Neue', Helvetica, Arial, sans-serif;
+	font-size: 14px;
+	height: 37px;
+	line-height: 20px;
+}
 
 .searchButton {
 	-webkit-appearance: none;
