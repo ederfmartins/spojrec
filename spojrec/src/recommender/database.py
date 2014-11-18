@@ -35,7 +35,7 @@ class ProblemsDatabase(object):
 			if cnt %100 == 0:
 				print 'parsing', cnt
 				
-			problems = [{"PROBLEM" : pp['PROBLEM'], 'AC':pp['RESULT']} for pp in parseSignedlist(submission['data'])]
+			problems = [{"PROBLEM" : pp['PROBLEM'], 'RESULT':pp['RESULT']} for pp in parseSignedlist(submission['data'])]
 			parsedProblemsByUser[submission['spojId']] = problems
 		
 		return parsedProblemsByUser
