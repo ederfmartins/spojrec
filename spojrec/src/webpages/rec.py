@@ -8,10 +8,10 @@ except ImportError:
 
 try:
     from spojrec.src.webpages.html import Attr, HtmlElement
-    from spojrec.src.recommender.engine import rec, create_default_recommender
+    from spojrec.src.recommender.engine import rec
 except ImportError:
     from webpages.html import Attr, HtmlElement
-    from recommender.engine import rec, create_default_recommender
+    from recommender.engine import rec
 
 class RecPage(webapp.RequestHandler):
     
@@ -78,19 +78,25 @@ class RecPage(webapp.RequestHandler):
             resultDiv = HtmlElement('div')
             resultDiv.addAttr(Attr('class', 'resultDiv'))
             
+            tableTop = HtmlElement('h3').addAttr(Attr('class', 'text-warning center-align'))
+            tableTop.addNode('Problemas recomendados para ' + self.spojId)
+            resultDiv.addNode(tableTop)
+            
             cnt = 1
             resultTable = HtmlElement('table').addAttr(Attr('class', 'recProbTable'))
             
             th = HtmlElement('tr')
             th.addNode(HtmlElement('th').addNode('#'))
-            th.addNode(HtmlElement('th').addNode('Problemas recomendados para ' + self.spojId))
-            th.addNode(HtmlElement('th').addNode('Id do Problema'))
+            #th.addNode(HtmlElement('th').addNode('Problemas recomendados para ' + self.spojId))
+            th.addNode(HtmlElement('th').addNode('Problemas Fáceis'))
+            th.addNode(HtmlElement('th').addNode('Problemas Difíceis'))
             resultTable.addNode(th)
             
             for problem in self.recommendedProblems:
                 tr = HtmlElement('tr')
                 tr.addNode(HtmlElement('td').addNode(str(cnt)))
-                tr.addNode(HtmlElement('td').addNode(HtmlElement('a').addAttr(Attr('href', problem['url'])).addNode(problem['title'])))
+                #tr.addNode(HtmlElement('td').addNode(HtmlElement('a').addAttr(Attr('href', problem['url'])).addNode(problem['title'])))
+                tr.addNode(HtmlElement('td').addNode(HtmlElement('a').addAttr(Attr('href', problem['url'])).addNode(problem['spojId'])))
                 tr.addNode(HtmlElement('td').addNode(HtmlElement('a').addAttr(Attr('href', problem['url'])).addNode(problem['spojId'])))
                 resultTable.addNode(tr)
                 cnt += 1
@@ -109,7 +115,6 @@ class RecPage(webapp.RequestHandler):
     
     def post(self):
         self.spojId = self.request.get("userId")
-        create_default_recommender()
         self.recommendedProblems = rec(self.spojId)
         self.get()
         
