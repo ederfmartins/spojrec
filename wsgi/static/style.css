@@ -57,12 +57,13 @@
 }
 
 .recProbTable tbody tr td, tbody tr th {
-	padding: 0px 15px 0px 15px;
+	/*padding: 0px 15px 0px 15px;*/
+	padding: 0px 0px 0px 0px;
 	background-color: rgb(73, 81, 90);
 	box-sizing: border-box;
 	/*color: rgb(238, 95, 91);
 	color: rgb(238, 95, 91);*/
-	color: black;
+	color: rgb(248, 148, 6);
 	display: table-cell;
 	font-family: 'Helvetica Neue', Helvetica, Arial, sans-serif;
 	font-size: 14px;
@@ -76,7 +77,7 @@
 .recProbTable tbody tr td a {
 	/*font-size: x-large;
 	color: black;*/
-	color: rgb(238, 95, 91);
+	color: rgb(248, 148, 6);
 	font-family: 'Helvetica Neue', Helvetica, Arial, sans-serif;
 	font-size: 14px;
 	height: 37px;
