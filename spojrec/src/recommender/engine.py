@@ -4,7 +4,7 @@ try:
 except:
     from spojrec.src.basicdefs import DEFAULT_RECOMMENDER
 
-    from spojrec.src.recommender.rec import Dacu, get_acepted_problems
+    from spojrec.src.recommender.rec import Dacu, HitsRec, get_acepted_problems
     from spojrec.src.recommender.database import ProblemsDatabase
     from spojrec.src.recommender.metrics import Metrics
 
