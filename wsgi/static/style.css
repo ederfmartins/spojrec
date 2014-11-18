@@ -48,6 +48,10 @@
   top: 60%;
   left: 0%;
 	/* background-color: lime; */
+	background-color: #ffffff;
+	border: 1px solid black;
+	opacity: 0.6;
+	filter: alpha(opacity=60); /* For IE8 and earlier */
 }
 
 .searchInput {
@@ -59,7 +63,7 @@
 .recProbTable tbody tr td, tbody tr th {
 	/*padding: 0px 15px 0px 15px;*/
 	padding: 0px 0px 0px 0px;
-	background-color: rgb(73, 81, 90);
+	/*background-color: rgb(73, 81, 90);*/
 	box-sizing: border-box;
 	/*color: rgb(238, 95, 91);
 	color: rgb(238, 95, 91);*/
