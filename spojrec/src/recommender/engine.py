@@ -17,7 +17,7 @@ def create_default_recommender():
     database.save_metrics(metrics)
 
 
-def rec(spojId, topk=5):
+def rec(spojId, recName='DACU',topk=5):
     database = ProblemsDatabase(True)
     metricsDict = database.get_metrics()
     user = database.find_user(spojId)
@@ -29,9 +29,14 @@ def rec(spojId, topk=5):
         metrics.__dict__.update(metricsDict)
         recommendedProblems = []
         userProblems = database.get_problems_of_user_from_db(spojId)
-        rec = Dacu(metrics, get_acepted_problems(userProblems))
         
-        recProblems = rec.rec(spojId, topk)
+        if recName == 'DACU':
+            rec = Dacu(metrics, get_acepted_problems(userProblems))
+            recProblems = rec.rec(spojId, topk)
+        elif:
+            rec = HitsRec(metrics, get_acepted_problems(userProblems))
+            recProblems = rec.rec(spojId, topk)
+            
         cnt = 0
         for (problem, score) in recProblems:
             if cnt >= topk:

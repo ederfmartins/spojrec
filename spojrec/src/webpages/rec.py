@@ -19,6 +19,7 @@ class RecPage(webapp.RequestHandler):
         super(webapp.RequestHandler, self).__init__()
         self.initialize(request, response)
         self.recommendedProblems = []
+        self.recommendedProblemsHard = []
         self.spojId = ''
         
     def get_head(self):
@@ -93,11 +94,12 @@ class RecPage(webapp.RequestHandler):
             resultTable.addNode(th)
             
             for problem in self.recommendedProblems:
+                rproblem = recommendedProblemsHard[cnt-1]
                 tr = HtmlElement('tr')
                 tr.addNode(HtmlElement('td').addNode(str(cnt)))
                 #tr.addNode(HtmlElement('td').addNode(HtmlElement('a').addAttr(Attr('href', problem['url'])).addNode(problem['title'])))
                 tr.addNode(HtmlElement('td').addNode(HtmlElement('a').addAttr(Attr('href', problem['url'])).addNode(problem['spojId'])))
-                tr.addNode(HtmlElement('td').addNode(HtmlElement('a').addAttr(Attr('href', problem['url'])).addNode(problem['spojId'])))
+                tr.addNode(HtmlElement('td').addNode(HtmlElement('a').addAttr(Attr('href', rproblem['url'])).addNode(rproblem['spojId'])))
                 resultTable.addNode(tr)
                 cnt += 1
             
@@ -116,6 +118,7 @@ class RecPage(webapp.RequestHandler):
     def post(self):
         self.spojId = self.request.get("userId")
         self.recommendedProblems = rec(self.spojId)
+        self.recommendedProblemsHard = rec(self.spojId, 'HITS', 5)
         self.get()
         
     
