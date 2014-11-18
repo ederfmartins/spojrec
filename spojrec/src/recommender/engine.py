@@ -12,9 +12,9 @@ def create_default_recommender():
     print 'load problems database'
     database = ProblemsDatabase()
     print 'calc metrics'
-    #metrics = Metrics(database.get_problems_by_user())
+    metrics = Metrics(database.get_problems_by_user())
     print 'save metrics'
-    #database.save_metrics(metrics)
+    database.save_metrics(metrics)
 
 
 def rec(spojId, topk=5):
