@@ -94,7 +94,7 @@ class RecPage(webapp.RequestHandler):
             resultTable.addNode(th)
             
             for problem in self.recommendedProblems:
-                rproblem = recommendedProblemsHard[cnt-1]
+                rproblem = self.recommendedProblemsHard[cnt-1]
                 tr = HtmlElement('tr')
                 tr.addNode(HtmlElement('td').addNode(str(cnt)))
                 #tr.addNode(HtmlElement('td').addNode(HtmlElement('a').addAttr(Attr('href', problem['url'])).addNode(problem['title'])))
