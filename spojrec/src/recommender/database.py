@@ -1,5 +1,6 @@
 
 import os
+import time
 from pymongo import MongoClient
 from spojrec.src.crawler.crawler.dataExtractor.signedlistParser import parseSignedlist
 
@@ -17,13 +18,17 @@ class ProblemsDatabase(object):
 			self._metrics = self._load_metrics()
 		else:
 			self.parsedProblemsByUser = self.load_problems()
-			self._split(self.parsedProblemsByUser)
+			print 'estou vivo'
+			#self._split(self.parsedProblemsByUser)
 	
 	
 	def load_problems(self):
 		parsedProblemsByUser = dict()
 		
-		for submission in self.db.submissionData.find():
+		cnt = 0
+		for submission in self.db.submissionData.find().batch_size(100):
+			cnt += 100
+			print 'parsing', cnt
 			parsedProblemsByUser[submission['spojId']] = parseSignedlist(submission['data'])
 		
 		return parsedProblemsByUser

@@ -9,8 +9,11 @@ except:
     from spojrec.src.recommender.metrics import Metrics
 
 def create_default_recommender():
+    print 'load problems database'
     database = ProblemsDatabase()
-    metrics = Metrics(database.get_test())
+    print 'calc metrics'
+    metrics = Metrics(database.get_problems_by_user())
+    print 'save metrics'
     database.save_metrics(metrics)
 
 
