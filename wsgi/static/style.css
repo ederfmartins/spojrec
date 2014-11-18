@@ -69,6 +69,7 @@
 	padding: 0px 15px 0px 15px;
 	/*background-color: rgb(53, 58, 65);*/
 	box-sizing: border-box;
+	/*color: rgb(238, 95, 91);*/
 	color: rgb(238, 95, 91);
 	display: table-cell;
 	font-family: 'Helvetica Neue', Helvetica, Arial, sans-serif;
@@ -83,7 +84,7 @@
 .recProbTable tbody tr td a {
 	/*font-size: x-large;
 	color: black;*/
-	color: #f89406;
+	color: rgb(238, 95, 91);
 	font-family: 'Helvetica Neue', Helvetica, Arial, sans-serif;
 	font-size: 14px;
 	height: 37px;
@@ -146,7 +147,7 @@
 }
 
 .text-warning, .text-warning:hover {
-	color: #f89406;
+	color: rgb(238, 95, 91);
 	font-family: 'Helvetica Neue', Helvetica, Arial, sans-serif;
 	font-size: 24px;
 	font-weight: 500;
