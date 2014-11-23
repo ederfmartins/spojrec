@@ -44,8 +44,8 @@ def stractProblemData(response):
 	item['_id'] = response.url.split('/problems/')[1].split('/.+')[0].replace('/', '')
 	item['title'] = response.xpath('//div[@class="prob"]/table/tr/td/h1/text()').extract()
 	item['snippet'] = response.xpath('//p[not(@align)]/text()').extract()
-	item['since'] = response.xpath('//td[text()="Data:"]/following-sibling::td[1]/text()')
-	item['contest'] = response.xpath('//td[text()="Origem:"]/following-sibling::td[1]/text()')
+	item['since'] = response.xpath('//td[text()="Data:"]/following-sibling::td[1]/text()').extract()
+	item['contest'] = response.xpath('//td[text()="Origem:"]/following-sibling::td[1]/text()').extract()
 	item['url'] = response.url
 	item['timestamp'] = datetime.datetime.utcnow()
 	return item
