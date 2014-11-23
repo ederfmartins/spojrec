@@ -19,6 +19,9 @@ class SubmissionsItem(SpojItem):
 class ProblemItem(SpojItem):
 	title = scrapy.Field()
 	url = scrapy.Field()
+	snippet = scrapy.Field()
+	since = scrapy.Field()
+	contest = scrapy.Field()
 
 def stractUserData(response):
 	item = UserItem()

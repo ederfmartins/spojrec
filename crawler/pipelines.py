@@ -25,7 +25,7 @@ class UserscrawlerPipeline(object):
 		self.db = self.client.index
 
 	def process_item(self, item, spider):
-		log.msg('Adding %s to mongodb.' % item['spojId'], level=log.INFO)
+		log.msg('Adding %s to mongodb.' % item['_id'], level=log.INFO)
 	
 		if type(item) is UserItem:
 			self.db.users.update({'_id' : item["_id"]}, dict(item), upsert=True)
