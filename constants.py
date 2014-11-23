@@ -1,6 +1,8 @@
 # -*- coding: utf-8 -*-
 import os
 
+PRODUCTION = False
+
 CRAWN_SPOJ = '/crawnspojstart'
 
 WORKER_QUEUE_URL = '/urldownloader'
@@ -16,16 +18,27 @@ SUBMISSIONS_PAGE_PATTERN = '.*/status/' + USER_NAME + '/signedlist/$'
 #default recommender in mencache
 DEFAULT_RECOMMENDER = 'defaultRecommender'
 
+def _get_constant(label, replacement):
+	if PRODUCTION:
+		return os.environ[label]
+	else:
+		return replacement
 
 #open shift constants
-DATA_DIR = os.environ['OPENSHIFT_DATA_DIR']
-SCRAPY_BIND_ADDRESS = os.environ['OPENSHIFT_PYTHON_IP']
-SCRAPY_HTTP_PORT = os.environ['OPENSHIFT_PYTHON_PORT']
-LOGS_DIR = os.environ['OPENSHIFT_PYTHON_LOG_DIR']
+DATA_DIR = _get_constant('OPENSHIFT_DATA_DIR', '~/maratona/spojrec/data')
+SCRAPY_BIND_ADDRESS = _get_constant('OPENSHIFT_PYTHON_IP', 'localhost')
+SCRAPY_HTTP_PORT = _get_constant('OPENSHIFT_PYTHON_PORT', '8080')
+LOGS_DIR = _get_constant('OPENSHIFT_PYTHON_LOG_DIR', '~/maratona/spojrec/logs')
+VIRTUAL_ENV_DIR = _get_constant('OPENSHIFT_PYTHON_DIR', '')
+
+#http server
+HTTP_HOST = 'localhost'
+HTTP_PORT = 8080
 
 #mongodb constants
-MONGODB_HOST = os.environ['OPENSHIFT_MONGODB_DB_HOST']
-MONGODB_PORT = os.environ['OPENSHIFT_MONGODB_DB_PORT']
+MONGODB_HOST = _get_constant('OPENSHIFT_MONGODB_DB_HOST', 'localhost')
+MONGODB_PORT = _get_constant('OPENSHIFT_MONGODB_DB_PORT', '27017')
 MONGODB_URL = 'mongodb://' + MONGODB_HOST + ':' + MONGODB_PORT + '/'
 MONGODB_USER = 'admin'
 MONGODB_PASS = 'vhZcQNxhPHwe'
+

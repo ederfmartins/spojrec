@@ -18,14 +18,34 @@
 	box-align:center;
 }
 
+.abouttop {
+  position: absolute;
+  width: 10%;
+  height: 5%;
+  
+  top: 0%;
+  left: 89%;
+  padding: 0px;
+}
+
 .top {
   position: absolute;
   width: 98%;
   height: 30%;
   
+  top: 6%;
+  left: 0%;
+  padding: 0px;
+}
+
+.top1 {
+  position: absolute;
+  width: 30%;
+  height: 30%;
+  
   top: 0%;
   left: 0%;
-  padding: 5px;
+  padding: 0px;
 }
 
 .inner {
@@ -33,8 +53,21 @@
   width: 98%;
   height: 20%;
   
-  top: 45%;
+  top: 42%;
   left: 0%;
+  box-pack:center;
+  box-align:center;
+  padding: 5px;
+  /* background-color: blue; */
+}
+
+.innerPost {
+  position: absolute;
+  width: 50%;
+  height: 30%;
+  
+  top: 0%;
+  left: 30%;
   box-pack:center;
   box-align:center;
   padding: 5px;
@@ -45,7 +78,7 @@
   position: absolute;
   width: 100%;
   
-  top: 60%;
+  top: 30%;
   left: 0%;
 	/*
 	background-color: blue;

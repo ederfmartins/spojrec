@@ -1,24 +1,27 @@
 #!/usr/bin/python
 import os
 
-virtenv = os.environ['OPENSHIFT_PYTHON_DIR'] + '/virtenv/'
-virtualenv = os.path.join(virtenv, 'bin/activate_this.py')
+from constants import VIRTUAL_ENV_DIR, HTTP_PORT, HTTP_HOST
+
 try:
+    virtenv = VIRTUAL_ENV_DIR + '/virtenv/'
+    virtualenv = os.path.join(virtenv, 'bin/activate_this.py')
     execfile(virtualenv, dict(__file__=virtualenv))
-except IOError:
+#except IOError:
+except:
     pass
-#
-# IMPORTANT: Put any additional includes below this line.  If placed above this
-# line, it's possible required libraries won't be in your searchable path
-#
 
-from spojrec.src.webpages.rec import application
+from webpages.mainpage import application
 
-#
-# Below for testing only
-#
 if __name__ == '__main__':
     from wsgiref.simple_server import make_server
-    httpd = make_server('localhost', 8051, application)
-    # Wait for a single request, serve it and quit.
-    httpd.handle_request()
+    import webapp2 as webapp
+    from paste.urlparser import StaticURLParser
+    from paste.cascade import Cascade
+    
+    static_app = StaticURLParser("wsgi/")
+    app = Cascade([static_app, application])
+    
+    httpd = make_server(HTTP_HOST, HTTP_PORT, app)
+    httpd.serve_forever()
+

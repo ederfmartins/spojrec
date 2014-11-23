@@ -1,15 +1,13 @@
-
+# -*- coding: utf-8 -*-
 import os
 import time
 from pymongo import MongoClient
-from spojrec.src.crawler.crawler.dataExtractor.signedlistParser import parseSignedlist
 
-from constants import MONGODB_URL, MONGODB_USER, MONGODB_PASS
+from crawler.dataExtractor.signedlistParser import parseSignedlist
+from constants import MONGODB_URL, MONGODB_USER, MONGODB_PASS, PRODUCTION
 
 class ProblemsDatabase(object):
 	def __init__(self, loadMetricsOnly=False):
-		PRODUCTION = True
-		
 		if PRODUCTION:
 			self.client = MongoClient(MONGODB_URL)
 			self.client.index.authenticate(MONGODB_USER, MONGODB_PASS, mechanism='MONGODB-CR')

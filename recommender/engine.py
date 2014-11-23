@@ -1,12 +1,9 @@
-try:
-    from google.appengine.api import memcache
-    from basicdefs import DEFAULT_RECOMMENDER
-except:
-    from spojrec.src.basicdefs import DEFAULT_RECOMMENDER
+# -*- coding: utf-8 -*-
+from constants import DEFAULT_RECOMMENDER
 
-    from spojrec.src.recommender.rec import Dacu, HitsRec, get_acepted_problems
-    from spojrec.src.recommender.database import ProblemsDatabase
-    from spojrec.src.recommender.metrics import Metrics
+from recommender.rec import Dacu, HitsRec, get_acepted_problems
+from recommender.database import ProblemsDatabase
+from recommender.metrics import Metrics
 
 def create_default_recommender():
     print 'load problems database'

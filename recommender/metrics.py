@@ -1,8 +1,8 @@
-
+# -*- coding: utf-8 -*-
 from collections import defaultdict
 
-from spojrec.src.recommender.database import ProblemsDatabase
-from spojrec.src.recommender.eval import eval_user
+from recommender.database import ProblemsDatabase
+from recommender.eval import eval_user
 
 class Metrics(object):
 

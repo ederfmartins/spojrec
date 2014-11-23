@@ -1,11 +1,12 @@
+# -*- coding: utf-8 -*-
 from operator import itemgetter
 from math import sqrt
 
 import logging
 
-from spojrec.src.recommender.database import ProblemsDatabase
-from spojrec.src.recommender.metrics import Metrics
-from spojrec.src.recommender.eval import eval_user
+from recommender.database import ProblemsDatabase
+from recommender.metrics import Metrics
+from recommender.eval import eval_user
 
 class Recommender(object):
 
