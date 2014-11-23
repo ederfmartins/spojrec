@@ -63,8 +63,8 @@ class SpojCrawler(CrawlSpider):
 	)
 
 	def __init__(self, name=None, **kwargs):
-		ScrapyFileLogObserver(open(self.name + ".log", 'w'), level=log.INFO).start()
-		ScrapyFileLogObserver(open(self.name + "_error.log", 'w'), level=log.ERROR).start()
+		#ScrapyFileLogObserver(open(self.name + ".log", 'w'), level=log.INFO).start()
+		#ScrapyFileLogObserver(open(self.name + "_error.log", 'w'), level=log.ERROR).start()
 		
 		super(SpojCrawler, self).__init__(name, **kwargs)
 		self.spojPattern = re.compile(SPOJ_WORLD_DOMAIN)

@@ -4,15 +4,15 @@ import time
 from pymongo import MongoClient
 from spojrec.src.crawler.crawler.dataExtractor.signedlistParser import parseSignedlist
 
+from constants import MONGODB_URL, MONGODB_USER, MONGODB_PASS
+
 class ProblemsDatabase(object):
 	def __init__(self, loadMetricsOnly=False):
 		PRODUCTION = True
 		
 		if PRODUCTION:
-			host = os.environ['OPENSHIFT_MONGODB_DB_HOST']
-			port = os.environ['OPENSHIFT_MONGODB_DB_PORT']
-			self.client = MongoClient('mongodb://' + host + ':' + port + '/')
-			self.client.index.authenticate('admin', 'vhZcQNxhPHwe', mechanism='MONGODB-CR')
+			self.client = MongoClient(MONGODB_URL)
+			self.client.index.authenticate(MONGODB_USER, MONGODB_PASS, mechanism='MONGODB-CR')
 			self.db = self.client.index
 		else:
 			self.client = MongoClient()
@@ -23,7 +23,8 @@ class ProblemsDatabase(object):
 		else:
 			self.parsedProblemsByUser = self.load_problems()
 			print 'estou vivo'
-			#self._split(self.parsedProblemsByUser)
+			if not PRODUCTION:
+				self._split(self.parsedProblemsByUser)
 	
 	
 	def load_problems(self):

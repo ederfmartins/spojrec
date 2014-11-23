@@ -16,6 +16,7 @@ from model.spojdata import update_problem, update_user, update_user_submissions
 
 START_SEED = 'http://br.spoj.com'
 
+#considerar o tracinho (-) acho que não estou crawleando problemas com -
 #links
 PROBLEMS_LIST_PATTERN = '.*/problems/[a-z0-9_]+/$'
 PROBLEMS_LIST1_PATTERN = '.*/problems/[a-z0-9_]+/sort=0,start=\d+'

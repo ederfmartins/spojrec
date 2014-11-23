@@ -1,3 +1,4 @@
+# -*- coding: utf-8 -*-
 from spojrec.src.basicdefs import DATA_DIR, SCRAPY_BIND_ADDRESS
 
 if __name__ == '__main__':
