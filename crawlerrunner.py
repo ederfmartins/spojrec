@@ -1,5 +1,6 @@
 # -*- coding: utf-8 -*-
-from spojrec.src.basicdefs import DATA_DIR, SCRAPY_BIND_ADDRESS
+import os
+from constants import DATA_DIR, SCRAPY_BIND_ADDRESS, SCRAPY_HTTP_PORT, LOGS_DIR
 
 if __name__ == '__main__':
    
