@@ -30,17 +30,7 @@ class UserscrawlerPipeline(object):
 		if type(item) is UserItem:
 			self.db.users.update({'_id' : item["_id"]}, dict(item), upsert=True)
 		elif type(item) is SubmissionsItem:
-			#storing full history data
 			self.db.submissionData.update({'_id' : item["_id"]}, dict(item), upsert=True)
-			
-			#storing parsed user submission data
-			#solvedProblems = []
-			#
-			#for problem in parseSignedlist(item['data']):
-			#	if problem['RESULT'] == 'AC':
-			#		solvedProblems.append(problem['PROBLEM'])
-			#
-			#self.db.solvedProblems.update({'_id' : item["_id"]}, dict({'spojId':item['spojId'], 'problemList':solvedProblems}), upsert=True)
 		elif type(item) is ProblemItem:
 			self.db.problems.update({'_id' : item["_id"]}, dict(item), upsert=True)
 		
