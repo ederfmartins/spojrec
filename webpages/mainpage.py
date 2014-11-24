@@ -157,7 +157,7 @@ class RecPage(webapp.RequestHandler):
             tableTop.addNode('Problemas recomendados para ' + spojId)
             resultDiv.addNode(tableTop)
             
-            cnt = 1
+            #cnt = 1
             #resultTable = HtmlElement('table').addAttr(Attr('class', 'recProbTable'))
             
             #th = HtmlElement('tr')
@@ -173,10 +173,11 @@ class RecPage(webapp.RequestHandler):
                 #tr.addNode(HtmlElement('td').addNode(HtmlElement('a').addAttr(Attr('href', problem['url'])).addNode(problem['spojId'])))
                 #resultTable.addNode(tr)
                 problemH3 = HtmlElement('h3')
-                l = HtmlElement('a').addAttr(Attr('href', problem['url'])).addNode(problem['title'])
-                problemH3.addNode(str(cnt) + str(l))
+                l = HtmlElement('a').addAttr(Attr('href', problem['url'])).addNode(problem['spojId'] + ' - ' + problem['title'])
+                problemH3.addNode(l)
                 resultDiv.addNode(problemH3)
-                cnt += 1
+                resultDiv.addNode(HtmlElement('p').addNode(problem['snippet']))
+                #cnt += 1
             
             #resultDiv.addNode(resultTable)
             mainDiv.addNode(resultDiv)

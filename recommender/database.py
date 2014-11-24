@@ -35,13 +35,13 @@ class ProblemsDatabase(object):
 				print 'parsing', cnt
 				
 			problems = [{"PROBLEM" : pp['PROBLEM'], 'RESULT':pp['RESULT']} for pp in parseSignedlist(submission['data'])]
-			parsedProblemsByUser[submission['spojId']] = problems
+			parsedProblemsByUser[submission['_id']] = problems
 		
 		return parsedProblemsByUser
 	
 	
 	def get_problems_of_user_from_db(self, spojId):
-		submission = self.db.submissionData.find_one({"spojId": spojId})
+		submission = self.db.submissionData.find_one({"_id": spojId})
 		ret = dict()
 		ret[spojId] = parseSignedlist(submission['data'])
 		return ret
@@ -61,11 +61,11 @@ class ProblemsDatabase(object):
 	
 	
 	def find_user(self, spojId):
-		return self.db.users.find_one({"spojId": spojId})
+		return self.db.users.find_one({"_id": spojId})
 	
 	
 	def find_problem(self, spojId):
-		return self.db.problems.find_one({"spojId": spojId})
+		return self.db.problems.find_one({"_id": spojId})
 		
 	
 	def _find_expected_answer(self, problems):

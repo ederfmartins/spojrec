@@ -42,10 +42,13 @@ def rec(spojId, recName='DACU',topk=5):
             theProblem = database.find_problem(problem)
             title = problem
             url = 'http://br.spoj.com/problems/' + problem
+            snippet = ''
             if theProblem is not None:
             	title = theProblem['title']
             	url = theProblem['url']
-            recommendedProblems.append({'spojId':problem, 'url':url, 'title':title})
+            	snippet = theProblem['snippet']
+            	snippet = str(snippet)[0 : min(len(snippet), 200)]
+            recommendedProblems.append({'spojId':problem, 'url':url, 'title':title, 'snippet':snippet})
     
             cnt += 1
         
