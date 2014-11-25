@@ -102,6 +102,17 @@ class RecPage(webapp.RequestHandler):
         search.addAttr(Attr('class', "searchButton"))
         return search
     
+    def get_prob_dificult_combo(self):
+        combo = HtmlElement('select')
+        combo.addAttr(Attr('name', "dif"))
+        combo.addAttr(Attr('id', "dif"))
+        for dificult in ['Fácil', 'Médio', 'Difícil']:
+        	item = HtmlElement('item')
+        	item.addAttr(Attr('value', dificult))
+        	item.addNode(dificult)
+        	combo.addNode(item)
+        return combo
+    
     def add_logo_div(self, mainDiv, cssClass):
         logoDiv = HtmlElement('div')
         logoDiv.addNode(HtmlElement('img').addAttr(Attr('src', 'static/logo.png')))
@@ -115,6 +126,7 @@ class RecPage(webapp.RequestHandler):
         
         mainDiv.addNode(self.create_aboutDiv())
         mainDiv.addNode(self.create_aboutText())
+        searchDiv.addNode(self.get_prob_dificult_combo())
         
         searchDiv = HtmlElement('div')
         searchDiv.addAttr(Attr('class', "inner"))
@@ -148,6 +160,7 @@ class RecPage(webapp.RequestHandler):
         
         searchDiv.addNode(self.get_query_button())
         searchDiv.addNode(self.get_search_button())
+        searchDiv.addNode(self.get_prob_dificult_combo())
         
         if len(recommendedProblems) > 0:
             resultDiv = HtmlElement('div')
@@ -157,29 +170,13 @@ class RecPage(webapp.RequestHandler):
             tableTop.addNode('Problemas recomendados para ' + spojId)
             resultDiv.addNode(tableTop)
             
-            #cnt = 1
-            #resultTable = HtmlElement('table').addAttr(Attr('class', 'recProbTable'))
-            
-            #th = HtmlElement('tr')
-            #th.addNode(HtmlElement('th').addNode('#'))
-            #th.addNode(HtmlElement('th').addNode('Problemas recomendados para ' + self.spojId))
-            #th.addNode(HtmlElement('th').addNode('Problemas Fáceis'))
-            #resultTable.addNode(th)
-            
             for problem in recommendedProblems:
-                #tr = HtmlElement('tr')
-                #tr.addNode(HtmlElement('td').addNode(str(cnt)))
-                ##tr.addNode(HtmlElement('td').addNode(HtmlElement('a').addAttr(Attr('href', problem['url'])).addNode(problem['title'])))
-                #tr.addNode(HtmlElement('td').addNode(HtmlElement('a').addAttr(Attr('href', problem['url'])).addNode(problem['spojId'])))
-                #resultTable.addNode(tr)
                 problemH3 = HtmlElement('h3')
-                l = HtmlElement('a').addAttr(Attr('href', problem['url'])).addNode(problem['spojId'] + ' - ' + problem['title'])
+                l = HtmlElement('a').addAttr(Attr('href', problem['url'])).addNode(str(problem['spojId']) + ' - ' + str(problem['title']))
                 problemH3.addNode(l)
                 resultDiv.addNode(problemH3)
                 resultDiv.addNode(HtmlElement('p').addNode(problem['snippet']))
-                #cnt += 1
-            
-            #resultDiv.addNode(resultTable)
+                
             mainDiv.addNode(resultDiv)
         
         body = HtmlElement('body')

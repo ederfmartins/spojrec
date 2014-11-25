@@ -12,9 +12,11 @@ class ProblemsDatabase(object):
 			self.client = MongoClient(MONGODB_URL)
 			self.client.index.authenticate(MONGODB_USER, MONGODB_PASS, mechanism='MONGODB-CR')
 			self.db = self.client.index
+			self._idField = '_id'
 		else:
 			self.client = MongoClient()
 			self.db = self.client.spojrec
+			self._idField = 'spojId'
 		
 		if loadMetricsOnly:
 			self._metrics = self._load_metrics()
@@ -41,7 +43,7 @@ class ProblemsDatabase(object):
 	
 	
 	def get_problems_of_user_from_db(self, spojId):
-		submission = self.db.submissionData.find_one({"_id": spojId})
+		submission = self.db.submissionData.find_one({self._idField: spojId})
 		ret = dict()
 		ret[spojId] = parseSignedlist(submission['data'])
 		return ret
@@ -61,11 +63,11 @@ class ProblemsDatabase(object):
 	
 	
 	def find_user(self, spojId):
-		return self.db.users.find_one({"_id": spojId})
+		return self.db.users.find_one({self._idField: spojId})
 	
 	
 	def find_problem(self, spojId):
-		return self.db.problems.find_one({"_id": spojId})
+		return self.db.problems.find_one({self._idField: spojId})
 		
 	
 	def _find_expected_answer(self, problems):

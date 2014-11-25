@@ -1,7 +1,7 @@
 # -*- coding: utf-8 -*-
 import os
 
-PRODUCTION = True
+PRODUCTION = False
 
 CRAWN_SPOJ = '/crawnspojstart'
 
