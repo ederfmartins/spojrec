@@ -126,11 +126,11 @@ class RecPage(webapp.RequestHandler):
         
         mainDiv.addNode(self.create_aboutDiv())
         mainDiv.addNode(self.create_aboutText())
-        searchDiv.addNode(self.get_prob_dificult_combo())
         
         searchDiv = HtmlElement('div')
         searchDiv.addAttr(Attr('class', "inner"))
         mainDiv.addNode(searchDiv)
+        searchDiv.addNode(self.get_prob_dificult_combo())
         
         searchDiv.addNode(self.get_query_button())
         searchDiv.addNode(self.get_search_button())
