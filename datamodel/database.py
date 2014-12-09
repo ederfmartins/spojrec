@@ -7,16 +7,16 @@ from crawler.dataExtractor.signedlistParser import parseSignedlist
 from constants import MONGODB_URL, MONGODB_USER, MONGODB_PASS, PRODUCTION
 
 class ProblemsDatabase(object):
-	def __init__(self, loadMetricsOnly=False):
+	def __init__(self, contest, loadMetricsOnly=False):
+		self._idField = '_id'
 		if PRODUCTION:
 			self.client = MongoClient(MONGODB_URL)
 			self.client.index.authenticate(MONGODB_USER, MONGODB_PASS, mechanism='MONGODB-CR')
 			self.db = self.client.index
-			self._idField = '_id'
 		else:
 			self.client = MongoClient()
 			self.db = self.client.spojrec
-			self._idField = 'spojId'
+			#self._idField = 'spojId'
 		
 		if loadMetricsOnly:
 			self._metrics = self._load_metrics()
@@ -42,16 +42,6 @@ class ProblemsDatabase(object):
 		return parsedProblemsByUser
 	
 	
-	def get_problems_of_user_from_db(self, spojId):
-		submission = self.db.submissionData.find_one({self._idField: spojId})
-		ret = dict()
-		ret[spojId] = parseSignedlist(submission['data'])
-		return ret
-	
-	def save_metrics(self, metrics):
-		self.db.metrics.insert(metrics.__dict__)
-	
-	
 	def _load_metrics(self):
 		return self.db.metrics.find_one()
 	
@@ -60,14 +50,6 @@ class ProblemsDatabase(object):
 		if self._metrics is None:
 			raise Exception("Metrics not load yet from db!")
 		return self._metrics
-	
-	
-	def find_user(self, spojId):
-		return self.db.users.find_one({self._idField: spojId})
-	
-	
-	def find_problem(self, spojId):
-		return self.db.problems.find_one({self._idField: spojId})
 		
 	
 	def _find_expected_answer(self, problems):
@@ -101,7 +83,31 @@ class ProblemsDatabase(object):
 	def get_test(self):
 		return self.test
 	
+	def get_problems_of_user_from_db(self, spojId):
+		submission = self.db.submissionData.find_one({self._idField: spojId})
+		if submission is None:
+			return None
+		
+		return submission
+	
+	def save_metrics(self, metrics):
+		self.db.metrics.insert(metrics.__dict__)
 	
 	def get_problems_by_user(self):
 		return self.parsedProblemsByUser
+	
+	def find_user(self, spojId):
+		return self.db.users.find_one({self._idField: spojId})
+	
+	def find_problem(self, spojId):
+		return self.db.problems.find_one({self._idField: spojId})
+	
+	def update_problem(self, itemAsDict):
+		self.db.problems.update({self._idField:itemAsDict[self._idField]}, itemAsDict, upsert=True)
+	
+	def update_user(self, itemAsDict):
+		self.db.users.update({self._idField:itemAsDict[self._idField]}, itemAsDict, upsert=True)
+	
+	def update_submission_data(self, itemAsDict):
+		self.db.submissionData.update({self._idField:itemAsDict[self._idField]}, itemAsDict, upsert=True)
 	

@@ -1,11 +1,11 @@
 # -*- coding: utf-8 -*-
 import os
 
-PRODUCTION = True
+PRODUCTION = False
 
 CRAWN_SPOJ = '/crawnspojstart'
 
-WORKER_QUEUE_URL = '/urldownloader'
+SPOJ_URLS = {'BR':'http://br.spoj.com', 'PL':'http://pl.spoj.com'}
 
 PROBLEM_NAME = '[A-Z0-9]+'
 USER_NAME = '[a-z0-9_]+'

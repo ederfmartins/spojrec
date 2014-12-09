@@ -9,7 +9,7 @@ from scrapy.log import ScrapyFileLogObserver
 
 import re
 
-from crawler.items import *
+from crawler.dataExtractor.extractor import *
 
 # Page relationship graph
 # <user_data_page> ---> <user_signedlist>
@@ -71,20 +71,20 @@ class SpojCrawler(CrawlSpider):
 		
 	def parseProblem(self, response):
 		log.msg('Crawling problem url %s.' % response.url, level=log.INFO)
-		if self.spojPattern.search(response.url) == None:
-			item = stractProblemData(response)
+		if self.spojPattern.search(response.url) is None:
+			item = stract_problem_data(response)
 			if not (item['title'] == 'SPOJ Brasil' or item['title'] == ''):
 				return item
 	
 	def parseSubmissions(self, response):
 		identifier = response.url.split('/status/')[1].split('/signedlist/')[0]
 		log.msg('Crawling signedlist of user %s from %s.' % (identifier, response.url), level=log.INFO)
-		item = stractSubmissionsData(identifier, response.body)
+		item = stract_submissions_data(identifier, response.body)
 		return item
 	
 	def parseUser(self, response):
 		log.msg('Crawling user from %s.' % response.url, level=log.INFO)
-		item = stractUserData(response)
+		item = stract_user_data(response)
 		return item
 		
 	def parseLinks(self, response):

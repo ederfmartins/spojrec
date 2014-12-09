@@ -89,13 +89,33 @@ a {
   top: 30%;
   left: 0%;
   text-align: left;
-  padding: 5px;
+  margin: 10px;
 }
 
 .searchInput {
 	width: 60%;
 	padding: 5px;
 	margin: 8px;
+}
+
+.difdiv {
+	width: 60%;
+	padding: 5px;
+	margin: 8px;
+	
+	font-family: 'Helvetica Neue', Helvetica, Arial, sans-serif;
+	font-size: 18px;
+	text-align: center;
+}
+
+.contestDiv {
+	width: 60%;
+	padding: 5px;
+	margin: 8px;
+	
+	font-family: 'Helvetica Neue', Helvetica, Arial, sans-serif;
+	font-size: 18px;
+	text-align: center;
 }
 
 .recProbTable tbody tr td, tbody tr th {

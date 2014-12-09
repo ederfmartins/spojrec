@@ -16,8 +16,6 @@ import pymongo
 from pymongo import MongoClient
 from bson.objectid import ObjectId
 
-#TODO: MUDAR FORMA QUE GUARDA NO DB db.teste.update({'_id' : x}, {'_id':x, 'value':'teste eder'}, upsert=True)
-#x = ObjectId("507f1f77bcf86cd799439011")
 class UserscrawlerPipeline(object):
 	def __init__(self):
 		self.client = MongoClient(MONGODB_URL)

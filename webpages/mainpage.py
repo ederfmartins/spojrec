@@ -1,4 +1,8 @@
 # -*- coding: utf-8 -*-
+
+import sys
+import random
+
 import webapp2 as webapp
 
 from webpages.html import Attr, HtmlElement
@@ -9,6 +13,11 @@ class RecPage(webapp.RequestHandler):
     def __init__(self, request, response):
         super(webapp.RequestHandler, self).__init__()
         self.initialize(request, response)
+        self.searchInputId = 'spojId'
+        self.difId = 'dif'
+        self.spojDB = 'contest'
+        self.dificulties = ['Normal', 'Facil', 'Dificil']
+        self.contests = ['BR', 'PL']
         
     def get_head(self):
         head = HtmlElement('head')
@@ -87,10 +96,12 @@ class RecPage(webapp.RequestHandler):
         aboutDiv.addAttr(Attr('title', "Sobre"))
         return aboutDiv
         
-    def get_query_button(self):
+    def get_query_button(self, spojId):
         query = HtmlElement('input')
-        query.addAttr(Attr('id', 'userId'))
-        query.addAttr(Attr('name', 'userId'))
+        query.addAttr(Attr('id', self.searchInputId))
+        query.addAttr(Attr('name', self.searchInputId))
+        if spojId != '':
+            query.addAttr(Attr('value', spojId))
         query.addAttr(Attr('placeholder', "id de um usuário ou problema do spoj"))
         query.addAttr(Attr('class', "searchInput"))
         return query
@@ -102,22 +113,56 @@ class RecPage(webapp.RequestHandler):
         search.addAttr(Attr('class', "searchButton"))
         return search
     
-    def get_prob_dificult_combo(self):
+    def get_prob_dificult_combo(self, selected):
         combo = HtmlElement('select')
-        combo.addAttr(Attr('name', "dif"))
-        combo.addAttr(Attr('id', "dif"))
-        for dificult in ['Fácil', 'Médio', 'Difícil']:
-        	item = HtmlElement('item')
+        combo.addAttr(Attr('name', self.difId))
+        combo.addAttr(Attr('id', self.difId))
+        combo.addAttr(Attr('value', selected))
+        for dificult in self.dificulties:
+        	item = HtmlElement('option')
         	item.addAttr(Attr('value', dificult))
+        	if dificult == selected:
+        	    item.addAttr(Attr('SELECTED', ''))
         	item.addNode(dificult)
         	combo.addNode(item)
-        return combo
+        
+        span = HtmlElement('span').addNode('Dificuldade dos problemas:')
+        div = HtmlElement('div').addAttr(Attr('class', 'difdiv'))
+        div.addNode(span)
+        div.addNode(combo)
+        return div
+    
+    def get_db_combo(self, db):
+        span = HtmlElement('span').addNode('SPOJ contest:')
+        div = HtmlElement('div').addAttr(Attr('class', 'contestDiv'))
+        div.addNode(span)
+        for contest in self.contests:
+            radio = HtmlElement('input')
+            radio.addAttr(Attr('type', 'radio'))
+            radio.addAttr(Attr('name', self.spojDB))
+            radio.addAttr(Attr('id', contest))
+            radio.addAttr(Attr('value', contest))
+            if contest == db:
+                radio.addAttr(Attr('checked', ''))
+            div.addNode(radio)
+            div.addNode(contest)
+        return div
     
     def add_logo_div(self, mainDiv, cssClass):
         logoDiv = HtmlElement('div')
         logoDiv.addNode(HtmlElement('img').addAttr(Attr('src', 'static/logo.png')))
         logoDiv.addAttr(Attr('class', cssClass))
         mainDiv.addNode(logoDiv)
+    
+    def add_search_div(self, mainDiv, cssclass, spojId, selected, db):
+        searchDiv = HtmlElement('div')
+        searchDiv.addAttr(Attr('class', cssclass))
+        mainDiv.addNode(searchDiv)
+        
+        searchDiv.addNode(self.get_query_button(spojId))
+        searchDiv.addNode(self.get_search_button())
+        searchDiv.addNode(self.get_prob_dificult_combo(selected))
+        searchDiv.addNode(self.get_db_combo(db))
         
     def get(self):
         form = self.create_form()
@@ -127,13 +172,7 @@ class RecPage(webapp.RequestHandler):
         mainDiv.addNode(self.create_aboutDiv())
         mainDiv.addNode(self.create_aboutText())
         
-        searchDiv = HtmlElement('div')
-        searchDiv.addAttr(Attr('class', "inner"))
-        mainDiv.addNode(searchDiv)
-        searchDiv.addNode(self.get_prob_dificult_combo())
-        
-        searchDiv.addNode(self.get_query_button())
-        searchDiv.addNode(self.get_search_button())
+        self.add_search_div(mainDiv, 'inner', '', 'Normal', 'BR')
         
         body = HtmlElement('body')
         body.addAttr(Attr('style', 'background-image:url(static/balloon-release.jpg);background-size: cover;'))
@@ -143,8 +182,10 @@ class RecPage(webapp.RequestHandler):
         
     
     def post(self):
-        spojId = self.request.get("userId")
-        recommendedProblems = rec(spojId)
+        spojId = self.request.get(self.searchInputId)
+        dificult = self.request.get(self.difId)
+        database = self.request.get(self.spojDB)
+        recommendedProblems = rec(spojId, database, dificult)
         
         form = self.create_form()
         mainDiv = self.create_mainDiv(form)
@@ -154,13 +195,7 @@ class RecPage(webapp.RequestHandler):
         mainDiv.addNode(self.create_aboutDiv())
         mainDiv.addNode(self.create_aboutText())
         
-        searchDiv = HtmlElement('div')
-        searchDiv.addAttr(Attr('class', "innerPost"))
-        mainDiv.addNode(searchDiv)
-        
-        searchDiv.addNode(self.get_query_button())
-        searchDiv.addNode(self.get_search_button())
-        searchDiv.addNode(self.get_prob_dificult_combo())
+        self.add_search_div(mainDiv, 'innerPost', spojId, dificult, database)
         
         if len(recommendedProblems) > 0:
             resultDiv = HtmlElement('div')
@@ -172,7 +207,15 @@ class RecPage(webapp.RequestHandler):
             
             for problem in recommendedProblems:
                 problemH3 = HtmlElement('h3')
+                
+                if isinstance(problem['title'], unicode):
+                    problem['title'] = problem['title'].encode('utf-8','ignore')
+                
+                if isinstance(problem['snippet'], unicode):
+                    problem['snippet'] = problem['snippet'].encode('utf-8','ignore')
+                
                 l = HtmlElement('a').addAttr(Attr('href', problem['url'])).addNode(str(problem['spojId']) + ' - ' + str(problem['title']))
+                problemH3.addNode(HtmlElement('img').addAttr(Attr('src', 'static/ballon' + str(random.randint(1,7)) + '.png')))
                 problemH3.addNode(l)
                 resultDiv.addNode(problemH3)
                 resultDiv.addNode(HtmlElement('p').addNode(problem['snippet']))
