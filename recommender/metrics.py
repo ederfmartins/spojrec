@@ -1,7 +1,7 @@
 # -*- coding: utf-8 -*-
 from collections import defaultdict
 
-from recommender.database import ProblemsDatabase
+from datamodel.database import ProblemsDatabase
 from recommender.eval import eval_user
 
 class Metrics(object):

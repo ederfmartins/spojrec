@@ -4,7 +4,7 @@ from math import sqrt
 
 import logging
 
-from recommender.database import ProblemsDatabase
+from datamodel.database import ProblemsDatabase
 from recommender.metrics import Metrics
 from recommender.eval import eval_user
 
