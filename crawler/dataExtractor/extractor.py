@@ -36,7 +36,7 @@ def stract_user_data(response):
 	
 	item = UserItem()
 	item['_id'] = _id
-	item['name'] = name
+	item['name'] = name.replace(u'Informa\xe7\u0151es do ', '').strip()
 	item['country'] = country
 	item['school'] = school
 	item['timestamp'] = datetime.datetime.utcnow()

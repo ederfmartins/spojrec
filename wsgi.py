@@ -1,7 +1,9 @@
 #!/usr/bin/python
-import os
 
-from constants import VIRTUAL_ENV_DIR, HTTP_PORT, HTTP_HOST
+import os
+import webapp2 as webapp
+from constants import VIRTUAL_ENV_DIR, HTTP_PORT, HTTP_HOST, PRODUCTION
+from constants import USER_NAME
 
 try:
     virtenv = VIRTUAL_ENV_DIR + '/virtenv/'
@@ -11,7 +13,11 @@ try:
 except:
     pass
 
-from webpages.mainpage import application
+from webpages.mainpage import RecPage
+from webpages.statistics import UserStatisticsPage
+
+application = webapp.WSGIApplication([('/', RecPage), 
+                                      ('/users/(.+)/(' + USER_NAME + ')', UserStatisticsPage)], debug=not PRODUCTION)
 
 if __name__ == '__main__':
     from wsgiref.simple_server import make_server

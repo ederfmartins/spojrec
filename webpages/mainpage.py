@@ -7,6 +7,7 @@ import webapp2 as webapp
 
 from webpages.html import Attr, HtmlElement
 from recommender.engine import rec
+from constants import SPOJ_URLS
 
 class RecPage(webapp.RequestHandler):
     
@@ -17,7 +18,7 @@ class RecPage(webapp.RequestHandler):
         self.difId = 'dif'
         self.spojDB = 'contest'
         self.dificulties = ['Normal', 'Facil', 'Dificil']
-        self.contests = ['BR', 'PL']
+        self.contests = SPOJ_URLS
         
     def get_head(self):
         head = HtmlElement('head')
@@ -142,10 +143,13 @@ class RecPage(webapp.RequestHandler):
             radio.addAttr(Attr('name', self.spojDB))
             radio.addAttr(Attr('id', contest))
             radio.addAttr(Attr('value', contest))
+            
             if contest == db:
                 radio.addAttr(Attr('checked', ''))
+            
             div.addNode(radio)
             div.addNode(contest)
+            
         return div
     
     def add_logo_div(self, mainDiv, cssClass):
@@ -201,8 +205,12 @@ class RecPage(webapp.RequestHandler):
             resultDiv = HtmlElement('div')
             resultDiv.addAttr(Attr('class', 'resultDiv'))
             
+            linkToUser = HtmlElement('a').addAttr(Attr('href', '/users/' + database + '/' + spojId))
+            linkToUser.addAttr(Attr('style', 'color:red;'))
+            linkToUser.addNode(spojId)
+            
             tableTop = HtmlElement('h3').addAttr(Attr('class', 'text-warning'))
-            tableTop.addNode('Problemas recomendados para ' + spojId)
+            tableTop.addNode('Porque recomendamos esses problemas para ' + str(linkToUser))
             resultDiv.addNode(tableTop)
             
             for problem in recommendedProblems:
@@ -227,7 +235,5 @@ class RecPage(webapp.RequestHandler):
         body.addNode(form)
         
         self.response.write('<html>' + str(self.get_head()) + str(body) + '</html>')
-        
 
-application = webapp.WSGIApplication([('/', RecPage)], debug=True)
 

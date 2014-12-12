@@ -5,7 +5,8 @@ PRODUCTION = True
 
 CRAWN_SPOJ = '/crawnspojstart'
 
-SPOJ_URLS = {'BR':'http://br.spoj.com', 'PL':'http://pl.spoj.com'}
+#SPOJ_URLS = {'BR':'http://br.spoj.com', 'PL':'http://pl.spoj.com'}
+SPOJ_URLS = {'BR':'http://br.spoj.com'}
 
 PROBLEM_NAME = '[A-Z0-9]+'
 USER_NAME = '[a-z0-9_]+'

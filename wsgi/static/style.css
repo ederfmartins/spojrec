@@ -135,6 +135,31 @@ a {
 	width: 222px;
 }
 
+.statTable, .statTable tr td, .statTable tr th {
+  width: 80%;
+  box-sizing: border-box;
+  background-color: rgb(73, 81, 90);
+  display: table-cell;
+  text-align: center;
+  vertical-align: middle;
+  border: 1px solid black;
+}
+
+.allStats {
+  width: 95%;
+  text-align: left;
+  /*border: 1px solid black;*/
+  padding: 0% 3% 0% 3%;
+}
+
+.chartDiv {
+  width: 80%;
+  margin: 0 auto;
+  text-align: center;
+  vertical-align: middle;
+  padding: 2% 2% 2% 2%;
+}
+
 .recProbTable tbody tr td a {
 	/*font-size: x-large;
 	color: black;*/

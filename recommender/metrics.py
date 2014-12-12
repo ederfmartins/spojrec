@@ -82,7 +82,8 @@ class Metrics(object):
 	
 	def get_dacu(self, problem):
 		if problem not in self.distinctProblemsSub:
-			raise ValueError(str(problem) + " not found in metrics database.")
+			#raise ValueError(str(problem) + " not found in metrics database.")
+			return 0
 		#return self.distinctProblemsAcept[problem]/self.distinctProblemsSub[problem]
 		return self.distinctProblemsAcept[problem]	
 		

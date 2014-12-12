@@ -6,8 +6,8 @@ from pymongo import MongoClient
 from crawler.dataExtractor.signedlistParser import parseSignedlist
 from constants import MONGODB_URL, MONGODB_USER, MONGODB_PASS, PRODUCTION
 
-class ProblemsDatabase(object):
-	def __init__(self, contest, loadMetricsOnly=False):
+class Database(object):
+	def __init__(self, contest):
 		self._idField = '_id'
 		if PRODUCTION:
 			self.client = MongoClient(MONGODB_URL)
@@ -17,6 +17,35 @@ class ProblemsDatabase(object):
 			self.client = MongoClient()
 			self.db = self.client.spojrec
 			#self._idField = 'spojId'
+
+	def get_problems_of_user_from_db(self, spojId):
+		submission = self.db.submissionData.find_one({self._idField: spojId})
+		if submission is None:
+			return None
+		
+		return submission
+	
+	def save_metrics(self, metrics):
+		self.db.metrics.insert(metrics.__dict__)
+	
+	def find_user(self, spojId):
+		return self.db.users.find_one({self._idField: spojId})
+	
+	def find_problem(self, spojId):
+		return self.db.problems.find_one({self._idField: spojId})
+	
+	def update_problem(self, itemAsDict):
+		self.db.problems.update({self._idField:itemAsDict[self._idField]}, itemAsDict, upsert=True)
+	
+	def update_user(self, itemAsDict):
+		self.db.users.update({self._idField:itemAsDict[self._idField]}, itemAsDict, upsert=True)
+	
+	def update_submission_data(self, itemAsDict):
+		self.db.submissionData.update({self._idField:itemAsDict[self._idField]}, itemAsDict, upsert=True)
+
+class ProblemsDatabase(Database):
+	def __init__(self, contest, loadMetricsOnly=False):
+		super(ProblemsDatabase, self).__init__(contest)
 		
 		if loadMetricsOnly:
 			self._metrics = self._load_metrics()
@@ -45,7 +74,10 @@ class ProblemsDatabase(object):
 	def _load_metrics(self):
 		return self.db.metrics.find_one()
 	
-	
+	def get_problems_by_user(self):
+		return self.parsedProblemsByUser
+		
+		
 	def get_metrics(self):
 		if self._metrics is None:
 			raise Exception("Metrics not load yet from db!")
@@ -76,6 +108,7 @@ class ProblemsDatabase(object):
 				self.expectedAnswer[user] = parsedProblemsByUser[user][0:idx]
 				self.test[user] = parsedProblemsByUser[user][idx:]
 	
+	
 	def get_expected_answer(self):
 		return self.expectedAnswer
 		
@@ -83,31 +116,4 @@ class ProblemsDatabase(object):
 	def get_test(self):
 		return self.test
 	
-	def get_problems_of_user_from_db(self, spojId):
-		submission = self.db.submissionData.find_one({self._idField: spojId})
-		if submission is None:
-			return None
-		
-		return submission
-	
-	def save_metrics(self, metrics):
-		self.db.metrics.insert(metrics.__dict__)
-	
-	def get_problems_by_user(self):
-		return self.parsedProblemsByUser
-	
-	def find_user(self, spojId):
-		return self.db.users.find_one({self._idField: spojId})
-	
-	def find_problem(self, spojId):
-		return self.db.problems.find_one({self._idField: spojId})
-	
-	def update_problem(self, itemAsDict):
-		self.db.problems.update({self._idField:itemAsDict[self._idField]}, itemAsDict, upsert=True)
-	
-	def update_user(self, itemAsDict):
-		self.db.users.update({self._idField:itemAsDict[self._idField]}, itemAsDict, upsert=True)
-	
-	def update_submission_data(self, itemAsDict):
-		self.db.submissionData.update({self._idField:itemAsDict[self._idField]}, itemAsDict, upsert=True)
 	
