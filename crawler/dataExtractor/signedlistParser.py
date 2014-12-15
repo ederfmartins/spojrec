@@ -1,11 +1,18 @@
 # -*- coding: utf-8 -*-
 
+LABEL_PROBLEM_COLUMN = 'PROBLEM'
+LABEL_COLUMN_ACCEPTED = 'RESULT'
+
 def parseSignedlist(data):
 	readAtributes = False
 	readDummyLine = False
 	readData = False
 	attrs = []
 	dataAsList = []
+	
+	if data is None:
+		return None
+	
 	for line in data.split('\n'):
 		if len(line) > 0 and line[0] == '/':
 			readAtributes = True

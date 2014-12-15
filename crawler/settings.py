@@ -17,7 +17,7 @@ ITEM_PIPELINES = {
     'crawler.pipelines.UserscrawlerPipeline': 300,
 }
 
-#LOG_LEVEL = 'INFO'
+LOG_LEVEL = 'INFO'
 
 DEFAULT_REQUEST_HEADERS = {
     'Accept': 'text/html,application/xhtml+xml,application/xml;q=0.9,*/*;q=0.8',
@@ -29,4 +29,4 @@ SCHEDULER_DISK_QUEUE = 'scrapy.squeue.PickleFifoDiskQueue'
 SCHEDULER_MEMORY_QUEUE = 'scrapy.squeue.FifoMemoryQueue'
 
 # Crawl responsibly by identifying yourself (and your website) on the user-agent
-#USER_AGENT = 'usersCrawler (+http://www.yourdomain.com)'
+USER_AGENT = 'recBot (+http://index-spojrec.rhcloud.com/)'

@@ -17,7 +17,8 @@ class RecPage(webapp.RequestHandler):
         self.searchInputId = 'spojId'
         self.difId = 'dif'
         self.spojDB = 'contest'
-        self.dificulties = ['Normal', 'Facil', 'Dificil']
+        #self.dificulties = ['Normal', 'Facil', 'Dificil']
+        self.dificulties = ['Normal', 'Facil']
         self.contests = SPOJ_URLS
         
     def get_head(self):

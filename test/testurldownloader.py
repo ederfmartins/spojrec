@@ -5,6 +5,8 @@ from urlDownloaderJob import extract_problem_data, extract_submissions_data, ext
 from urlDownloaderJob import follow
 from crawler.downloadQueue import DonloadQueue
 
+#DEPRECATED
+
 class TestFollowFunc(unittest.TestCase):
     
     def test_follow(self):

@@ -47,11 +47,13 @@ LINKS_DENIED = (RANKS_PAGE_PATTERN_EXCLUDE,)
 
 class SpojCrawler(CrawlSpider):
 	name = "spojCrawler"
+	contestUnderCrawl = 'BR'
 	allowed_domains = SPOJBR_DOMAIN
 	start_urls = ["http://br.spoj.com/problems/seletivas", 
 	"http://br.spoj.com/problems/contest_noturno/", 
 	"http://br.spoj.com/problems/mineira/", 
 	"http://br.spoj.com/problems/obi/", 
+	"http://br.spoj.com/problems/regionais/",
 	"http://br.spoj.com/problems/seletiva_ioi/", 
 	"http://br.spoj.com/problems/sulamericana/"]
 	#download_delay = 2
@@ -72,19 +74,19 @@ class SpojCrawler(CrawlSpider):
 	def parseProblem(self, response):
 		log.msg('Crawling problem url %s.' % response.url, level=log.INFO)
 		if self.spojPattern.search(response.url) is None:
-			item = stract_problem_data(response)
+			item = extract_problem_data(response)
 			if not (item['title'] == 'SPOJ Brasil' or item['title'] == ''):
 				return item
 	
 	def parseSubmissions(self, response):
 		identifier = response.url.split('/status/')[1].split('/signedlist/')[0]
 		log.msg('Crawling signedlist of user %s from %s.' % (identifier, response.url), level=log.INFO)
-		item = stract_submissions_data(identifier, response.body)
+		item = extract_submissions_data(identifier, response.body)
 		return item
 	
 	def parseUser(self, response):
 		log.msg('Crawling user from %s.' % response.url, level=log.INFO)
-		item = stract_user_data(response)
+		item = extract_user_data(response)
 		return item
 		
 	def parseLinks(self, response):

@@ -6,56 +6,57 @@ from datetime import datetime, timedelta
 from constants import DEFAULT_RECOMMENDER
 from constants import SPOJ_URLS
 
-from datamodel.database import ProblemsDatabase
-from recommender.rec import Dacu, HitsRec, get_acepted_problems
-from recommender.metrics import Metrics
+from datamodel.database import MetricsDatabase
+from recommender.rec import Dacu, HitsRec, DacuTopK
 from crawler.util import fetch_user, fetch_problem
 from crawler.dataExtractor.signedlistParser import parseSignedlist
 
-def create_default_recommender():
-    print 'load problems database'
-    database = ProblemsDatabase('BR', False)
-    print 'calc metrics'
-    metrics = Metrics(database.get_problems_by_user())
-    print 'save metrics'
-    database.save_metrics(metrics)
+def find_user(database, spojId, contest):
+    user = database.find_user(spojId)
+    if user is None:
+        fetch_user(spojId, contest, database)
+        user = database.find_user(spojId)
+    return user
 
+def find_problem(database, probId, contest):
+    theProblem = database.find_problem(probId)
+    if (theProblem is None) or ('snippet' not in theProblem):
+        fetch_problem(probId, contest, database)
+        theProblem = database.find_problem(probId)
+    return theProblem
 
-def rec(spojId, contest, level, recName='DACU',topk=5):
-    database = ProblemsDatabase(contest, True)
-    metricsDict = database.get_metrics()
+def uptate_problems(database, spojId, contest):
+    userProblems = database.get_problems_of_user_from_db(spojId)
+            
+    if userProblems is None:
+        fetch_user(spojId, contest, database, onlySubmitions=True)
+        userProblems = database.get_problems_of_user_from_db(spojId)
+    else:
+        if datetime.utcnow() - userProblems['timestamp'] > timedelta(minutes = 15):
+            fetch_user(spojId, contest, database, onlySubmitions=True)
+            userProblems = database.get_problems_of_user_from_db(spojId)
 
-    if spojId in metricsDict["problems"]:
+def rec(spojId, contest, level, topk=5):
+    database = MetricsDatabase(contest)
+    problem = database.find_problem(spojId)
+    
+    if problem is not None:
         pass
     else:
-        user = database.find_user(spojId)
-        if user is None:
-            fetch_user(spojId, contest, database)
-            user = database.find_user(spojId)
+        user = find_user(database, spojId, contest)
             
         if user is not None:
-            metrics = Metrics()
-            metrics.__dict__.update(metricsDict)
             recommendedProblems = []
-            userProblems = database.get_problems_of_user_from_db(spojId)
-            
-            if userProblems is None:
-                fetch_user(spojId, contest, database, onlySubmitions=True)
-                userProblems = database.get_problems_of_user_from_db(spojId)
-            else:
-                if datetime.utcnow() - userProblems['timestamp'] > timedelta(minutes = 15):
-                    fetch_user(spojId, contest, database, onlySubmitions=True)
-                    userProblems = database.get_problems_of_user_from_db(spojId)
+            uptate_problems(database, spojId, contest)
 		    
-            probByUser = dict()
-            probByUser[spojId] = parseSignedlist(userProblems['data'])
-            probs = get_acepted_problems(probByUser)
-		    
-            if recName == 'DACU':
-                rec = Dacu(metrics, probs)
+            if level == 'Facil':
+                rec = Dacu(database)
                 recProblems = rec.rec(spojId, topk)
-            elif recName == 'HITS':
-                rec = HitsRec(metrics, probs)
+            elif level == 'Normal':
+                rec = HitsRec(database)
+                recProblems = rec.rec(spojId, topk)
+            elif level == 'Dificil':
+                rec = DacuTopK(database)
                 recProblems = rec.rec(spojId, topk)
 		        
             cnt = 0
@@ -63,10 +64,7 @@ def rec(spojId, contest, level, recName='DACU',topk=5):
                 if cnt >= topk:
                     break
 		        
-                theProblem = database.find_problem(problem)
-                if theProblem is None:
-                    fetch_problem(problem, contest, database)
-                    theProblem = database.find_problem(problem)
+                theProblem = find_problem(database, problem, contest)
                 title = problem
                 url = SPOJ_URLS[contest] + problem
                 snippet = ''
@@ -76,10 +74,6 @@ def rec(spojId, contest, level, recName='DACU',topk=5):
                         title = ''.join(title)
                     
                     url = theProblem['url']
-                    if 'snippet' not in theProblem:
-                        fetch_problem(problem, contest, database)
-                        theProblem = database.find_problem(problem)
-                    
                     snippet = theProblem['snippet']
                     if isinstance(snippet, list):
                         snippet = ''.join(snippet)
@@ -93,6 +87,3 @@ def rec(spojId, contest, level, recName='DACU',topk=5):
 		    
     return []
 
-if __name__ == "__main__":
-    create_default_recommender()
-    #print rec("ederfmartins", 10)
