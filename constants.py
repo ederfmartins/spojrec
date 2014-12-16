@@ -26,11 +26,12 @@ def _get_constant(label, replacement):
 		return replacement
 
 #open shift constants
-LOG_DIR = _get_constant('OPENSHIFT_PYTHON_LOG_DIR', '~/maratona/spojrec/logs/')
-DATA_DIR = _get_constant('OPENSHIFT_DATA_DIR', '~/maratona/spojrec/data')
+_CUR_DIR = os.path.dirname(os.path.abspath(__file__))
+LOG_DIR = _get_constant('OPENSHIFT_PYTHON_LOG_DIR', _CUR_DIR + '/logs/')
+DATA_DIR = _get_constant('OPENSHIFT_DATA_DIR', _CUR_DIR + '/data')
 SCRAPY_BIND_ADDRESS = _get_constant('OPENSHIFT_PYTHON_IP', 'localhost')
 SCRAPY_HTTP_PORT = _get_constant('OPENSHIFT_PYTHON_PORT', '8080')
-LOGS_DIR = _get_constant('OPENSHIFT_PYTHON_LOG_DIR', '~/maratona/spojrec/logs')
+LOGS_DIR = _get_constant('OPENSHIFT_PYTHON_LOG_DIR', _CUR_DIR + '/logs')
 VIRTUAL_ENV_DIR = _get_constant('OPENSHIFT_PYTHON_DIR', '')
 
 #http server

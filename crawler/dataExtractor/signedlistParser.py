@@ -36,21 +36,3 @@ def parseSignedlist(data):
 	
 	return dataAsList
 
-
-if __name__ == "__main__":
-	data = str(file('testData.txt').read())
-	obj = parseSignedlist(data)
-	
-	#The test file has 284 submissions
-	assert len(obj) == 284
-	assert obj[0]['PROBLEM'] == 'TELEMAR7'
-	assert obj[283]['PROBLEM'] == 'VARETAS'
-
-
-	data = str(file('testData1.txt').read())
-	obj = parseSignedlist(data)
-	
-	#The test file has 284 submissions
-	assert len(obj) == 26
-	assert obj[0]['PROBLEM'] == 'POPULAR'
-	assert obj[24]['PROBLEM'] == 'BAFO'

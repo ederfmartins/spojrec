@@ -8,14 +8,17 @@ class SpojItem(scrapy.Item):
 	timestamp = scrapy.Field()
 
 class UserItem(SpojItem):
+	"""Store data about users of spoj"""
 	name = scrapy.Field()
 	country = scrapy.Field()
 	school = scrapy.Field()
 	
 class SubmissionsItem(SpojItem):
+	"""Store data about problems submited to spoj"""
 	data = scrapy.Field()
 		
 class ProblemItem(SpojItem):
+	"""Store data about problems of spoj"""
 	title = scrapy.Field()
 	url = scrapy.Field()
 	snippet = scrapy.Field()
