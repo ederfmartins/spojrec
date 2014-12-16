@@ -88,7 +88,7 @@ class SpojCrawler(CrawlSpider):
 		
 		problems = parseSignedlist(item['data'])
 		for prob in problems:
-			url = str(allowed_domains[0]) + '/problems/' + prob[LABEL_PROBLEM_COLUMN] + '/'
+			url = str(self.allowed_domains[0]) + '/problems/' + prob[LABEL_PROBLEM_COLUMN] + '/'
 			yield Request(url=url)
 		
 	
