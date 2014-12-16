@@ -1,7 +1,7 @@
 # -*- coding: utf-8 -*-
 
 import scrapy
-from scrapy.http import HtmlResponse
+from scrapy.http import HtmlResponse, Request
 from scrapy.contrib.spiders import CrawlSpider, Rule
 from scrapy.contrib.linkextractors import LinkExtractor
 from scrapy import log
@@ -10,6 +10,7 @@ from scrapy.log import ScrapyFileLogObserver
 import re
 
 from crawler.dataExtractor.extractor import *
+from crawler.dataExtractor.signedlistParser import parseSignedlist, LABEL_PROBLEM_COLUMN
 
 # Page relationship graph
 # <user_data_page> ---> <user_signedlist>
@@ -82,6 +83,10 @@ class SpojCrawler(CrawlSpider):
 		identifier = response.url.split('/status/')[1].split('/signedlist/')[0]
 		log.msg('Crawling signedlist of user %s from %s.' % (identifier, response.url), level=log.INFO)
 		item = extract_submissions_data(identifier, response.body)
+		problems = parseSignedlist(item['data'])
+		for prob in problems:
+			url = str(allowed_domains[0]) + '/problems' + prob[LABEL_PROBLEM_COLUMN + '/'
+			yield Request(url=url)
 		return item
 	
 	def parseUser(self, response):
