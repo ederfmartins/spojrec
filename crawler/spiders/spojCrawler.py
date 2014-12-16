@@ -83,11 +83,14 @@ class SpojCrawler(CrawlSpider):
 		identifier = response.url.split('/status/')[1].split('/signedlist/')[0]
 		log.msg('Crawling signedlist of user %s from %s.' % (identifier, response.url), level=log.INFO)
 		item = extract_submissions_data(identifier, response.body)
+		
+		yield item
+		
 		problems = parseSignedlist(item['data'])
 		for prob in problems:
 			url = str(allowed_domains[0]) + '/problems/' + prob[LABEL_PROBLEM_COLUMN] + '/'
 			yield Request(url=url)
-		return item
+		
 	
 	def parseUser(self, response):
 		log.msg('Crawling user from %s.' % response.url, level=log.INFO)
