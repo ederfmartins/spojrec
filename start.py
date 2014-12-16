@@ -12,4 +12,4 @@ print subprocess.Popen("mongo <spojrecdb.txt", shell=True, stdout=PIPE).stdout.r
 print subprocess.Popen("scrapy crawl spojCrawler -s LOG_FILE=" + LOGS_DIR + "scrapy.log 2>" + LOGS_DIR + "scrapy.err", shell=True, stdout=PIPE).stdout.read()
 
 #compute metrics
-print subprocess.Popen("python recommender/metrics.py >" + LOGS_DIR + "metrics.log 2>" + LOGS_DIR + "metrics.err", shell=True, stdout=PIPE).stdout.read()
+print subprocess.Popen("python recommender/metrics.py BR >" + LOGS_DIR + "metrics.log 2>" + LOGS_DIR + "metrics.err", shell=True, stdout=PIPE).stdout.read()
