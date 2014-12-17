@@ -10,15 +10,14 @@ from constants import MONGODB_URL, MONGODB_USER, MONGODB_PASS, PRODUCTION
 
 class Database(object):
 	def __init__(self, contest):
-		self._idField = '_id'
 		if PRODUCTION:
 			self.client = MongoClient(MONGODB_URL)
 			self.client.index.authenticate(MONGODB_USER, MONGODB_PASS, mechanism='MONGODB-CR')
-			self.db = self.client.index
 		else:
 			self.client = MongoClient()
-			self.db = self.client.index
-			#self._idField = 'spojId'
+		
+		self.db = self.client.index
+		self._idField = '_id'
 
 	def get_problems_of_user_from_db(self, spojId):
 		submission = self.db.submissionData.find_one({self._idField: spojId})
@@ -52,79 +51,6 @@ class Database(object):
 	
 	def update_submission_data(self, itemAsDict):
 		self.db.submissionData.update({self._idField:itemAsDict[self._idField]}, itemAsDict, upsert=True)
-
-class ProblemsDatabase(Database):
-	def __init__(self, contest, loadMetricsOnly=False):
-		super(ProblemsDatabase, self).__init__(contest)
-		
-		if loadMetricsOnly:
-			self._metrics = self._load_metrics()
-		else:
-			self.parsedProblemsByUser = self.load_problems()
-			print 'estou vivo'
-			if not PRODUCTION:
-				self._split(self.parsedProblemsByUser)
-	
-	
-	def load_problems(self):
-		parsedProblemsByUser = dict()
-		
-		cnt = 0
-		for submission in self.db.submissionData.find().batch_size(100):
-			cnt += 1
-			if cnt %100 == 0:
-				print 'parsing', cnt
-				
-			problems = [{"PROBLEM" : pp['PROBLEM'], 'RESULT':pp['RESULT']} for pp in parseSignedlist(submission['data'])]
-			parsedProblemsByUser[submission['_id']] = problems
-		
-		return parsedProblemsByUser
-	
-	
-	def _load_metrics(self):
-		return self.db.metrics.find_one()
-	
-	def get_problems_by_user(self):
-		return self.parsedProblemsByUser
-		
-		
-	def get_metrics(self):
-		if self._metrics is None:
-			raise Exception("Metrics not load yet from db!")
-		return self._metrics
-		
-	
-	def _find_expected_answer(self, problems):
-		cnt = 0
-		idx = 0
-		for problem in problems:
-			if problem['RESULT'] == 'AC':
-				idx = cnt
-				if idx >= 10:
-					return idx
-			
-			cnt += 1
-		
-		return 0
-			
-		
-	def _split(self, parsedProblemsByUser):
-		self.expectedAnswer = dict()
-		self.test = dict()
-		
-		for user in parsedProblemsByUser:
-			idx = self._find_expected_answer(parsedProblemsByUser[user])
-			if idx >= 10:
-				self.expectedAnswer[user] = parsedProblemsByUser[user][0:idx]
-				self.test[user] = parsedProblemsByUser[user][idx:]
-	
-	
-	def get_expected_answer(self):
-		return self.expectedAnswer
-		
-		
-	def get_test(self):
-		return self.test
 	
 	
 class MetricsDatabase(Database):

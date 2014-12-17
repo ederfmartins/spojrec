@@ -11,7 +11,7 @@ def parseSignedlist(data):
 	dataAsList = []
 	
 	if data is None:
-		return None
+		return []
 	
 	for line in data.split('\n'):
 		if len(line) > 0 and line[0] == '/':
